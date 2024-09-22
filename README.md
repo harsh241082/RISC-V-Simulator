@@ -112,7 +112,7 @@ The project is organized as follows:\
   - `data.cpp`: Contains the strings and maps to store the data of the instructions.
   - `cpu.cpp`: Implements the functionalities  of the CPU.
   - `memory.cpp`: Implemests the memory opertions
-  - `executor.cpp`: Contains the implementation details of the execution of the decoded  instructions.
+  - `executor.cpp`: Contains the implementation details required for execution of the decoded  instructions.
   - `main.cpp`: The entry point of the application.
 
 - **include/**: Contains all the Header files for the above source code files used in the project and an additional risc-v.h file.
