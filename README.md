@@ -7,7 +7,6 @@ The primary objective of this project is to design and implement a RISC-V Simula
 - [Overview](#overview)
 - [Instructions](#instructions)
 - [Project Expandability](#project-expandability)
-- [How to Build](#how-to-build)
 - [Installation](#Installation)
 - [Project Structure](#project-structure)
 - [File Descriptions](#file-descriptions)
@@ -34,9 +33,9 @@ This project focuses on supporting a subset of the RISC-V instruction set, speci
 - The project can  be made to support for more than one file by making a loop in `main.cpp` and calling  the `tester.py` for each file.
 - We can improve the  application by adding a GUI to it.
 
-## How to build
+## Installation
 
-Make can be used to build the application:
+Make can be used to install the application in your personal repo or folder:
 
 ```console
 make all
