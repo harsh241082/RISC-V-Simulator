@@ -9,11 +9,11 @@ for file in file_names:
         content = f.read()
     with open("input.s",'w') as o:
         o.write(content)
-    if os.path.exists("riscv_asm.exe"):
+    if os.path.exists("riscv_sim.exe"):
         pass
     else:
         print("Please run make all befor this file")
-    subprocess.run(["riscv_asm.exe"])
+    subprocess.run(["riscv_sim.exe"])
     if os.path.exists("output.hex"):
         with open("output.hex",'r') as f:
             print("---------------Start---------------")
