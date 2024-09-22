@@ -30,6 +30,9 @@ This project focuses on supporting a subset of the RISC-V instruction set, speci
 - If needed more instructions can be added to the `risc_v.h` file.
 - New Instruction type can be added by making a function in `instruction.h`.
 - The maximum line of input file can be increased by just chenging the 50 in `data.h` and `data.cpp`.
+- The application can be made to support for pseudo-instructions by adding a new function in `instruction.h`
+- The project can  be made to support for more than one file by making a loop in `main.cpp` and calling  the `tester.py` for each file.
+- We can improve the  application by adding a GUI to it.
 
 ## How to build
 
@@ -112,7 +115,6 @@ The project is organized as follows:\
 
 - **include/**: Contains all the Header files for the above source code files used in the project and an additional risc-v.h file.
   - `risc-v.h`: Contains the information about registers and instruction ,their corresponding opcode,funct values.
-- **Makefile**: Configuration file for Make to build the project.
-- **README.md**: Provides an overview of the project, including how to set it up and run it.
+- **Makefile**: Configuration file for Make to build the project..
 - **test_cases**: Contains all the files which have test cases.
 - **tester.py**: This file automaticaly test all the file is test_cases
