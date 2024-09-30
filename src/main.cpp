@@ -58,10 +58,18 @@ int main()
         comment_ctr = 0;
     }
     input.close();
-    while (true)
+    string command;
+    cin >> command;
+    while (command != "exit")
     {
-        
+        cin >> command;
+        if (command == "run")
+        {
+        }
+        else if (command == "regs")
+        {
+        }
     }
-    
+
     return 0;
 }

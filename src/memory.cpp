@@ -1,4 +1,4 @@
 #include "../include/memory.h"
 
-int Memory[1638] = {};
-std::string instructionMemory[4096] = {};
+int Memory[16384] = {0};
+std::string instructionMemory[4096] = {""};
