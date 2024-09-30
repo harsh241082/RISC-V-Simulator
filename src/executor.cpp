@@ -1,3 +1,18 @@
 #include "../include/executor.h"
 
-int breakPoints[4096] = {0};
+bool breakPoints[4096] = {0};
+
+void RunTillBreakPoint(int totalLines)
+{
+    for (ProgramCounter; ProgramCounter < totalLines; ProgramCounter++)
+    {
+        if (breakPoints[ProgramCounter])
+        {
+            break;
+        }
+        exicuteInstruction();
+    }
+}
+void exicuteInstruction()
+{
+}

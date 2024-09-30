@@ -1,4 +1,6 @@
 #ifndef EXECUTOR_H
 #define EXECUTOR_H
-extern int breakPoints[4096];
+#include "data.h"
+extern bool breakPoints[4096];
+void exicuteInstruction();
 #endif

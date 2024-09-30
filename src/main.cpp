@@ -4,6 +4,7 @@
 #include "../include/data.h"
 #include "../include/memory.h"
 #include "../include/cpu.h"
+#include "../include/executor.h"
 #include <iostream>
 #include <fstream>
 
@@ -58,6 +59,8 @@ int main()
         ProgramCounter++;
         comment_ctr = 0;
     }
+    int numLines = ProgramCounter;
+    ProgramCounter = 0;
     input.close();
     string command;
     cin >> command;
@@ -70,6 +73,42 @@ int main()
         else if (command == "regs")
         {
             ShowRegisters(cpu);
+        }
+        else if (command == "mem")
+        {
+            string address;
+            int count;
+            cin >> address >> count;
+            ShowMemory(address, count);
+        }
+        else if (command == "step")
+        {
+        }
+        else if (command == "show-stack")
+        {
+        }
+        else if (command == "break")
+        {
+            int breakPoint;
+            cin >> breakPoint;
+            breakPoints[breakPoint] = 1;
+        }
+        else if (command == "del")
+        {
+            int breakPoint;
+            string isBreak;
+            cin >> isBreak >> breakPoint;
+            if (isBreak != "break")
+            {
+                cout << "invalid command" << endl;
+                continue;
+            }
+            if (breakPoints[breakPoint] == 0)
+            {
+                cout << "breakpoint not found" << endl;
+                continue;
+            }
+            breakPoints[breakPoint] = 0;
         }
     }
 
