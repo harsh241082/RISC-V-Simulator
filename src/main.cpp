@@ -3,6 +3,7 @@
 #include "../include/risc-v.h"
 #include "../include/data.h"
 #include "../include/memory.h"
+#include "../include/cpu.h"
 #include <iostream>
 #include <fstream>
 
@@ -68,6 +69,7 @@ int main()
         }
         else if (command == "regs")
         {
+            ShowRegisters(cpu);
         }
     }
 

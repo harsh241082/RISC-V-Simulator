@@ -1,5 +1,7 @@
 #include "../include/cpu.h"
-#include <iostream>
+using namespace std;
+CPU *cpu = new CPU;
+
 void InitCPU(CPU *cpu)
 {
     for (int i = 0; i < 32; i++)
@@ -21,6 +23,9 @@ void ShowRegisters(CPU *cpu)
 {
     for (int i = 0; i < 32; i++)
     {
-        std::cout << "x" << i << " = " << cpu->registers[i] << std::endl;
+        stringstream ss;
+        ss << hex << cpu->registers[i];
+        string regStr = ss.str();
+        std::cout << "x" << i << " = " << regStr << std::endl;
     }
 }
