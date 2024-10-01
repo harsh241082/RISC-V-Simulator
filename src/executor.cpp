@@ -12,7 +12,7 @@ void RunTillBreakPoint(int totalLines)
                  << endl;
             break;
         }
-        exicuteInstruction();
+        executeInstruction();
     }
 }
 void executeInstruction()
