@@ -1,9 +1,7 @@
-#include "../include/encoder.h"
+#ifndef MAIN_CPP
+#define MAIN_CPP
+
 #include "../include/parser.h"
-#include "../include/risc-v.h"
-#include "../include/data.h"
-#include "../include/memory.h"
-#include "../include/cpu.h"
 #include "../include/executor.h"
 #include <iostream>
 #include <fstream>
@@ -63,13 +61,21 @@ int main()
     int numLines = ProgramCounter;
     ProgramCounter = 0;
     input.close();
+    InitCPU(cpu);
     string command;
     cin >> command;
     while (command != "exit")
     {
-        cin >> command;
         if (command == "run")
         {
+            if (ProgramCounter >= numLines)
+            {
+                cout << "Nothing to run\n"
+                     << endl;
+                cin >> command;
+                continue;
+            }
+            RunTillBreakPoint(numLines);
         }
         else if (command == "regs")
         {
@@ -84,35 +90,66 @@ int main()
         }
         else if (command == "step")
         {
+            if (ProgramCounter >= numLines)
+            {
+                cout << "Nothing to step\n"
+                     << endl;
+                cin >> command;
+                continue;
+            }
+            executeInstruction();
+            cout << endl;
         }
         else if (command == "show-stack")
         {
+            showCallStack();
         }
         else if (command == "break")
         {
             int breakPoint;
             cin >> breakPoint;
-            cout << "breakpoint set at line " << breakPoint << endl;
-            breakPoints[breakPoint] = 1;
+            if (breakPoint > numLines)
+            {
+                cout << "invalid breakpoint" << endl;
+                cin >> command;
+                continue;
+            }
+            cout << "breakpoint set at line " << breakPoint << endl
+                 << endl;
+            breakPoints[breakPoint - 1] = 1;
         }
         else if (command == "del")
         {
             int breakPoint;
             string isBreak;
             cin >> isBreak >> breakPoint;
+            if (breakPoint > numLines)
+            {
+                cout << "invalid breakpoint" << endl;
+                cin >> command;
+                continue;
+            }
             if (isBreak != "break")
             {
                 cout << "invalid command" << endl;
+                cin >> command;
                 continue;
             }
-            if (breakPoints[breakPoint] == 0)
+            if (breakPoints[breakPoint - 1] == 0)
             {
                 cout << "breakpoint not found" << endl;
+                cin >> command;
                 continue;
             }
-            breakPoints[breakPoint] = 0;
+            breakPoints[breakPoint - 1] = 0;
         }
+        else
+        {
+            cout << "invalid command" << endl;
+        }
+        cin >> command;
     }
 
     return 0;
 }
+#endif
