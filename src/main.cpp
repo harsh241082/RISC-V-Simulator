@@ -13,7 +13,7 @@ using namespace std;
 int main()
 {
     string fileName;
-    ifstream input(fileName);
+    ifstream input;
     while (true)
     {
         string command;
@@ -21,6 +21,7 @@ int main()
         if (command == "load")
         {
             cin >> fileName;
+            input.open(fileName);
             if (!input.is_open())
             {
                 cout << "file not found" << endl;
@@ -91,6 +92,7 @@ int main()
         {
             int breakPoint;
             cin >> breakPoint;
+            cout << "breakpoint set at line " << breakPoint << endl;
             breakPoints[breakPoint] = 1;
         }
         else if (command == "del")
