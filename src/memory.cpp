@@ -1,8 +1,8 @@
 #include "../include/memory.h"
 using namespace std;
-int Memory[16384] = {0};
+char Memory[262145] = {0};
 string instructionMemory[4096] = {""};
-int stackPointer = 16384;
+int stackPointer = 262145;
 void ShowMemory(string address, int count)
 {
     int addr = strToInt(address);
@@ -24,7 +24,7 @@ void showCallStack()
 {
     int sp = 16383;
     cout << "Call Stack:" << endl;
-    if (stackPointer == 16384)
+    if (stackPointer == 262145)
     {
         cout << "main:0" << endl;
         return;
@@ -43,14 +43,24 @@ void showCallStack()
     }
 }
 
-int fechMemory(int address, int Numbytes, int byteOffset)
+int fechMemory(int address, int Numbytes)
 {
-    if (byteOffset == 0)
+    address = address - 65536;
+    int data = 0;
+    for (int i = 0; i < Numbytes; i++)
     {
-        int data = Memory[address];
+        data = data << 8;
+        data = data | Memory[address];
+        address++;
     }
 }
 
-void storeMemory(int address, int Numbytes, int byteOffset)
+void storeMemory(int address, int Numbytes, int value)
 {
+    address = address - 65536;
+    for (int i = Numbytes - 1; i >= 0; i--)
+    {
+        Memory[address + i] = value & 0xFF;
+        value = value >> 8;
+    }
 }
