@@ -10,6 +10,6 @@ extern std::string instructionMemory[4096];
 extern int Memory[16384];
 extern int stackPointer = 16384;
 void ShowMemory(std::string address, int count);
-void storeMemory(int address, int Numbytes, int byteOffset);
-int fechMemory(int address, int Numbytes, int byteOffset);
+void storeMemory(int address, int Numbytes, int value);
+int fechMemory(int address, int Numbytes);
 #endif
