@@ -30,6 +30,9 @@ memory.o: memory.cpp
 executor.o: executor.cpp	
 	g++ -c src/executor.o
 
+linerunner.o: linerunner.cpp
+	g++ -c src/linerunner.o
+	
 cleano: 
 	rm src/*.o
 
