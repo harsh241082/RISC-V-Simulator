@@ -42,3 +42,15 @@ void showCallStack()
         sp--;
     }
 }
+
+int fechMemory(int address, int Numbytes, int byteOffset)
+{
+    if (byteOffset == 0)
+    {
+        int data = Memory[address];
+    }
+}
+
+void storeMemory(int address, int Numbytes, int byteOffset)
+{
+}
