@@ -9,13 +9,14 @@ void ShowMemory(string address, int count)
     addr = addr - 65536;
     for (int i = 0; i < count; i++)
     {
-        stringstream ss;
+        stringstream ss, ss1;
         string addrStr;
         ss << hex << addr + 65536;
         addrStr = ss.str();
         addrStr = "0x" + addrStr;
-        ss << hex << Memory[addr];
-        string memStr = ss.str();
+        int mem = Memory[addr];
+        ss1 << hex << mem;
+        string memStr = ss1.str();
         memStr = "0x" + memStr;
         cout << "Memory[" << addrStr << "] = " << memStr << endl;
         addr++;
@@ -29,7 +30,7 @@ void showCallStack()
     cout << "Call Stack:" << endl;
     if (stackPointer == 262145)
     {
-        cout << "main:0" << endl;
+        cout << "main:" << ProgramCounter << endl;
         return;
     }
     if (Lines[Memory[sp]].label != "main")

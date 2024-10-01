@@ -1,7 +1,5 @@
-#include "../include/parser.h"
+
 #include "../include/encoder.h"
-#include "../include/risc-v.h"
-#include "../include/data.h"
 
 using namespace std;
 

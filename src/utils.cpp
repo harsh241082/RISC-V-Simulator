@@ -1,7 +1,5 @@
 #include "../include/utilis.h"
-#include "../include/encoder.h"
-#include "../include/risc-v.h"
-#include "../include/data.h"
+
 using namespace std;
 
 vector<string> tokenize(const string &line)

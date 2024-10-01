@@ -1,5 +1,4 @@
 #include "../include/data.h"
-#include "../include/instruction.h"
 #include <unordered_map>
 
 Instruction Lines[4096] = {};
