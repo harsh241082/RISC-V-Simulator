@@ -13,11 +13,14 @@ void ShowMemory(string address, int count)
         string addrStr;
         ss << hex << addr + 65536;
         addrStr = ss.str();
+        addrStr = "0x" + addrStr;
         ss << hex << Memory[addr];
         string memStr = ss.str();
+        memStr = "0x" + memStr;
         cout << "Memory[" << addrStr << "] = " << memStr << endl;
         addr++;
     }
+    cout << endl;
 }
 
 void showCallStack()

@@ -26,6 +26,8 @@ void ShowRegisters(CPU *cpu)
         stringstream ss;
         ss << hex << cpu->registers[i];
         string regStr = ss.str();
+        regStr = "0x" + regStr;
         std::cout << "x" << i << " = " << regStr << std::endl;
     }
+    cout << endl;
 }
