@@ -208,7 +208,7 @@ void func_sd(Instruction instruct){
 void func_beq(Instruction instruct){
     int rs1 = GetRegister(cpu,instruct.rs1);
     int rs2 = GetRegister(cpu,instruct.rs2);
-    int imm = instruct.immediate;
+    int imm = instruct.immediate/4;
     if(rs1 == rs2){
         ProgramCounter += imm;
     }
