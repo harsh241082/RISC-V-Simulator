@@ -3,12 +3,11 @@
 #include <iostream>
 #include <string>
 #include <sstream>
-extern CPU *cpu;
 struct CPU
 {
     int registers[32];
 };
-
+extern CPU *cpu;
 void InitCPU(CPU *cpu);
 int GetRegister(CPU *cpu, int regIndex);
 void SetRegister(CPU *cpu, int regIndex, int value);

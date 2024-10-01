@@ -5,11 +5,11 @@
 #include <sstream>
 #include <iostream>
 #include <string>
-#define MEMORY_SIZE 16384;
 extern std::string instructionMemory[4096];
-extern int Memory[16384];
-extern int stackPointer = 16384;
+extern char Memory[262145];
+extern int stackPointer;
 void ShowMemory(std::string address, int count);
 void storeMemory(int address, int Numbytes, int value);
 int fechMemory(int address, int Numbytes);
+void showCallStack();
 #endif

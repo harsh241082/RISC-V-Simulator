@@ -1,6 +1,8 @@
 #ifndef UTILIS_H
 #define UTILIS_H
-
+#include "encoder.h"
+#include "risc-v.h"
+#include "data.h"
 #include <vector>
 #include <string>
 

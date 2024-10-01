@@ -2,6 +2,8 @@
 #define PARSER_H
 
 #include "instruction.h"
+#include "utilis.h"
+#include "risc-v.h"
 #include <iostream>
 #include <vector>
 #include <string>
