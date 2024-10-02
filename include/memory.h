@@ -5,11 +5,12 @@
 #include <sstream>
 #include <iostream>
 #include <string>
+#include <algorithm>
 extern std::string instructionMemory[4096];
 extern char Memory[262145];
 extern int stackPointer;
 void ShowMemory(std::string address, int count);
 void storeMemory(int address, int Numbytes, int value);
 int fechMemory(int address, int Numbytes);
-void showCallStack();
+void showCallStack(int numLines);
 #endif

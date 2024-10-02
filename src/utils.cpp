@@ -74,6 +74,20 @@ vector<string> tokenize(string &line)
             }
             newToken += token[j];
         }
+        if (tokens[3][0] == 'x')
+        {
+            string temp = tokens[2];
+            tokens[2] = tokens[3];
+            tokens[3] = temp;
+        }
+    }
+    while (*tokens[0].end() == ' ')
+    {
+        tokens[0].pop_back();
+    }
+    while (*tokens[0].begin() == ' ')
+    {
+        tokens[0].erase(0, 1);
     }
     return tokens;
 }

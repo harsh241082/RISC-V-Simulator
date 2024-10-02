@@ -12,7 +12,6 @@ Instruction parseInstruction(std::string &line)
         instrction.error = "empty line";
         return instrction;
     }
-
     auto instrectInfo = instructionData.find(tokens[0]);
     if (instrectInfo == instructionData.end())
     {
@@ -46,7 +45,6 @@ Instruction parseInstruction(std::string &line)
             }
         }
     }
-
     // adds all the values acording to the respective format
     switch (instrction.instructionInfo.format)
     {

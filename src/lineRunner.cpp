@@ -325,10 +325,10 @@ void func_jal(Instruction instruct)
 void func_jalr(Instruction instruct)
 {
     int rd_index = instruct.rd;
-    int rs1 = GetRegister(cpu, instruct.rs1);
+    int rs1 = GetRegister(cpu, instruct.rs1) / 4;
     SetRegister(cpu, rd_index, (ProgramCounter + 1) * 4);
     int imm = instruct.immediate / 4;
-    ProgramCounter = rs1 + imm;
+    ProgramCounter = rs1 + imm - 1;
     stackPointer++;
 }
 void func_lui(Instruction instruct)

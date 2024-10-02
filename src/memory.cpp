@@ -17,6 +17,8 @@ void ShowMemory(string address, int count)
         int mem = Memory[addr];
         ss1 << hex << mem;
         string memStr = ss1.str();
+        if (memStr.length() > 2)
+            memStr = memStr.substr(memStr.length() - 2, 2);
         memStr = "0x" + memStr;
         cout << "Memory[" << addrStr << "] = " << memStr << endl;
         addr++;
@@ -24,10 +26,16 @@ void ShowMemory(string address, int count)
     cout << endl;
 }
 
-void showCallStack()
+void showCallStack(int numLines)
 {
     int sp = 16383;
+    if (ProgramCounter >= numLines)
+    {
+        cout << "Empty call Stack: Execution completed" << endl;
+        return;
+        }
     cout << "Call Stack:" << endl;
+    cout << stackPointer << endl;
     if (stackPointer == 262145)
     {
         cout << "main:" << ProgramCounter << endl;
@@ -35,13 +43,17 @@ void showCallStack()
     }
     if (Lines[Memory[sp]].label != "main")
     {
-        cout << "main:" << Memory[sp] << endl;
+        char lineNo = Memory[sp];
+        cout << "main:" << static_cast<int>(lineNo) << endl;
         sp--;
     }
     while (sp > stackPointer)
     {
-        int lineNo = Memory[sp];
-        string label = Lines[lineNo].label;
+        int lineNo = static_cast<int>(Memory[sp]);
+        string label;
+        auto it = find_if(labelData.begin(), labelData.end(), [lineNo](const pair<string, int> &p)
+                          { return p.second == lineNo; });
+        label = it->first;
         cout << label << ":" << lineNo << endl;
         sp--;
     }
@@ -54,9 +66,11 @@ int fechMemory(int address, int Numbytes)
     for (int i = 0; i < Numbytes; i++)
     {
         data = data << 8;
-        data = data | Memory[address];
+        int num = static_cast<int>(Memory[address]);
+        data = data | num;
         address++;
     }
+    return data;
 }
 
 void storeMemory(int address, int Numbytes, int value)
@@ -64,7 +78,8 @@ void storeMemory(int address, int Numbytes, int value)
     address = address - 65536;
     for (int i = Numbytes - 1; i >= 0; i--)
     {
-        Memory[address + i] = value & 0xFF;
+        char num = static_cast<char>(value & 0xFF);
+        Memory[address + i] = num;
         value = value >> 8;
     }
 }

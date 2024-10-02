@@ -102,7 +102,7 @@ int main()
         }
         else if (command == "show-stack")
         {
-            showCallStack();
+            showCallStack(numLines);
         }
         else if (command == "break")
         {
@@ -123,15 +123,15 @@ int main()
             int breakPoint;
             string isBreak;
             cin >> isBreak >> breakPoint;
-            if (breakPoint > numLines)
-            {
-                cout << "invalid breakpoint" << endl;
-                cin >> command;
-                continue;
-            }
             if (isBreak != "break")
             {
                 cout << "invalid command" << endl;
+                cin >> command;
+                continue;
+            }
+            if (breakPoint > numLines)
+            {
+                cout << "invalid breakpoint" << endl;
                 cin >> command;
                 continue;
             }
@@ -142,6 +142,7 @@ int main()
                 continue;
             }
             breakPoints[breakPoint - 1] = 0;
+            cout << endl;
         }
         else
         {
