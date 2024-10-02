@@ -1,10 +1,8 @@
 #include "../include/parser.h"
 
-using namespace std;
-
 Instruction parseInstruction(std::string &line)
 {
-    vector<string> tokens = tokenize(line);
+    std::vector<std::string> tokens = tokenize(line);
     Instruction instrction;
 
     if (tokens.size() == 0)
@@ -28,8 +26,8 @@ Instruction parseInstruction(std::string &line)
     // convers alias names to rigester names
     for (int i = 1; i < size; i++)
     {
-        string token = tokens[i];
-        string newToken = "";
+        std::string token = tokens[i];
+        std::string newToken = "";
         if (token[0] != 'x')
         {
             if (token[0] == 'r' || token[0] == 's' || token[0] == 'g' || token[0] == 't' || token[0] == 'a' || token[0] == 'z')

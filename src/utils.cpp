@@ -1,12 +1,10 @@
 #include "../include/utilis.h"
 
-using namespace std;
-
-vector<string> tokenize(string &line)
+std::vector<std::string> tokenize(std::string &line)
 {
-    vector<string> tokens;
-    string token = "";
-    string label;
+    std::vector<std::string> tokens;
+    std::string token = "";
+    std::string label;
     while (line[0] == ' ')
     {
         line.erase(0, 1);
@@ -48,11 +46,11 @@ vector<string> tokenize(string &line)
         return tokens;
     }
     size_t index = tokens[2].find("(");
-    if (index != string::npos)
+    if (index != std::string::npos)
     {
         tokens.resize(4);
-        string token = tokens[2];
-        string newToken = "";
+        std::string token = tokens[2];
+        std::string newToken = "";
         int j;
         for (j = 0; j < token.length(); j++)
         {
@@ -76,7 +74,7 @@ vector<string> tokenize(string &line)
         }
         if (tokens[3][0] == 'x')
         {
-            string temp = tokens[2];
+            std::string temp = tokens[2];
             tokens[2] = tokens[3];
             tokens[3] = temp;
         }
@@ -92,12 +90,12 @@ vector<string> tokenize(string &line)
     return tokens;
 }
 
-int strToInt(const string &num)
+int strToInt(const std::string &num)
 {
     int32_t i = 0;
     if (num[0] == '-')
     {
-        string token = "";
+        std::string token = "";
         for (int j = 1; j < num.length(); j++)
         {
             token += num[j];
@@ -112,7 +110,7 @@ int strToInt(const string &num)
     }
     else
     {
-        string token = "";
+        std::string token = "";
         for (int j = 0; j < num.length(); j++)
         {
             token += num[j];
@@ -127,9 +125,9 @@ int strToInt(const string &num)
     return i;
 }
 
-int rigToInt(const string &num)
+int rigToInt(const std::string &num)
 {
-    string token = "";
+    std::string token = "";
     for (int i = 1; i < num.length(); i++)
         token += num[i];
 

@@ -6,35 +6,33 @@
 #include <iostream>
 #include <fstream>
 
-using namespace std;
-
 int main()
 {
-    string fileName;
-    ifstream input;
+    std::string fileName;
+    std::ifstream input;
     while (true)
     {
-        string command;
-        cin >> command;
+        std::string command;
+        std::cin >> command;
         if (command == "load")
         {
-            cin >> fileName;
+            std::cin >> fileName;
             input.open(fileName);
             if (!input.is_open())
             {
-                cout << "file not found" << endl;
-                cout << "enter a valid file name" << endl;
+                std::cout << "file not found" << std::endl;
+                std::cout << "enter a valid file name" << std::endl;
                 continue;
             }
             break;
         }
         else
         {
-            cout << "load a file before exicuting any command" << endl;
+            std::cout << "load a file before exicuting any command" << std::endl;
         }
     }
 
-    string line;
+    std::string line;
     ProgramCounter = 0;
     EmptyLines[0] = 0;
     int comment_ctr = 0;
@@ -62,17 +60,17 @@ int main()
     ProgramCounter = 0;
     input.close();
     InitCPU(cpu);
-    string command;
-    cin >> command;
+    std::string command;
+    std::cin >> command;
     while (command != "exit")
     {
         if (command == "run")
         {
             if (ProgramCounter >= numLines)
             {
-                cout << "Nothing to run\n"
-                     << endl;
-                cin >> command;
+                std::cout << "Nothing to run\n"
+                          << std::endl;
+                std::cin >> command;
                 continue;
             }
             RunTillBreakPoint(numLines);
@@ -83,22 +81,22 @@ int main()
         }
         else if (command == "mem")
         {
-            string address;
+            std::string address;
             int count;
-            cin >> address >> count;
+            std::cin >> address >> count;
             ShowMemory(address, count);
         }
         else if (command == "step")
         {
             if (ProgramCounter >= numLines)
             {
-                cout << "Nothing to step\n"
-                     << endl;
-                cin >> command;
+                std::cout << "Nothing to step\n"
+                          << std::endl;
+                std::cin >> command;
                 continue;
             }
             executeInstruction();
-            cout << endl;
+            std::cout << std::endl;
         }
         else if (command == "show-stack")
         {
@@ -107,48 +105,48 @@ int main()
         else if (command == "break")
         {
             int breakPoint;
-            cin >> breakPoint;
+            std::cin >> breakPoint;
             if (breakPoint > numLines)
             {
-                cout << "invalid breakpoint" << endl;
-                cin >> command;
+                std::cout << "invalid breakpoint" << std::endl;
+                std::cin >> command;
                 continue;
             }
-            cout << "breakpoint set at line " << breakPoint << endl
-                 << endl;
+            std::cout << "breakpoint set at line " << breakPoint << std::endl
+                      << std::endl;
             breakPoints[breakPoint - 1] = 1;
         }
         else if (command == "del")
         {
             int breakPoint;
-            string isBreak;
-            cin >> isBreak >> breakPoint;
+            std::string isBreak;
+            std::cin >> isBreak >> breakPoint;
             if (isBreak != "break")
             {
-                cout << "invalid command" << endl;
-                cin >> command;
+                std::cout << "invalid command" << std::endl;
+                std::cin >> command;
                 continue;
             }
             if (breakPoint > numLines)
             {
-                cout << "invalid breakpoint" << endl;
-                cin >> command;
+                std::cout << "invalid breakpoint" << std::endl;
+                std::cin >> command;
                 continue;
             }
             if (breakPoints[breakPoint - 1] == 0)
             {
-                cout << "breakpoint not found" << endl;
-                cin >> command;
+                std::cout << "breakpoint not found" << std::endl;
+                std::cin >> command;
                 continue;
             }
             breakPoints[breakPoint - 1] = 0;
-            cout << endl;
+            std::cout << std::endl;
         }
         else
         {
-            cout << "invalid command" << endl;
+            std::cout << "invalid command" << std::endl;
         }
-        cin >> command;
+        std::cin >> command;
     }
 
     return 0;

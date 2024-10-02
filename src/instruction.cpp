@@ -1,9 +1,7 @@
 #include "../include/instruction.h"
 #include <sstream>
 
-using namespace std;
-
-string R_type_to_hex(const Instruction R)
+std::string R_type_to_hex(const Instruction R)
 {
     unsigned int decimal_value = 0;
     decimal_value += (R.instructionInfo.funct7 << 25);
@@ -12,18 +10,18 @@ string R_type_to_hex(const Instruction R)
     decimal_value += (R.instructionInfo.funct3 << 12);
     decimal_value += (R.rd << 7);
     decimal_value += (R.instructionInfo.opcode);
-    string str;
-    stringstream ss;
+    std::string str;
+    std::stringstream ss;
     ss << std::hex << decimal_value;
     str = ss.str();
     if (str.length() != 8)
     {
-        str = string(8 - str.length(), '0') + str;
+        str = std::string(8 - str.length(), '0') + str;
     }
     return str;
 }
 
-string I_type_to_hex(const Instruction I)
+std::string I_type_to_hex(const Instruction I)
 {
     unsigned int decimal_value = 0;
     decimal_value += (I.immediate << 20);
@@ -31,18 +29,18 @@ string I_type_to_hex(const Instruction I)
     decimal_value += (I.instructionInfo.funct3 << 12);
     decimal_value += (I.rd << 7);
     decimal_value += (I.instructionInfo.opcode);
-    string str;
-    stringstream ss;
+    std::string str;
+    std::stringstream ss;
     ss << std::hex << decimal_value;
     str = ss.str();
     if (str.length() != 8)
     {
-        str = string(8 - str.length(), '0') + str;
+        str = std::string(8 - str.length(), '0') + str;
     }
     return str;
 }
 
-string S_type_to_hex(const Instruction S)
+std::string S_type_to_hex(const Instruction S)
 {
     unsigned int decimal_value = 0;
     unsigned int i = 0b111111100000;
@@ -56,18 +54,18 @@ string S_type_to_hex(const Instruction S)
     j = S.immediate & i;
     decimal_value += (j << 7);
     decimal_value += (S.instructionInfo.opcode);
-    string str;
-    stringstream ss;
+    std::string str;
+    std::stringstream ss;
     ss << std::hex << decimal_value;
     str = ss.str();
     if (str.length() != 8)
     {
-        str = string(8 - str.length(), '0') + str;
+        str = std::string(8 - str.length(), '0') + str;
     }
     return str;
 }
 
-string B_type_to_hex(const Instruction B)
+std::string B_type_to_hex(const Instruction B)
 {
     unsigned int decimal_value = 0;
     unsigned int i = 0b1000000000000;
@@ -90,35 +88,35 @@ string B_type_to_hex(const Instruction B)
     j >>= 11;
     decimal_value += (j << 7);
     decimal_value += (B.instructionInfo.opcode);
-    string str;
-    stringstream ss;
+    std::string str;
+    std::stringstream ss;
     ss << std::hex << decimal_value;
     str = ss.str();
     if (str.length() != 8)
     {
-        str = string(8 - str.length(), '0') + str;
+        str = std::string(8 - str.length(), '0') + str;
     }
     return str;
 }
 
-string U_type_to_hex(const Instruction U)
+std::string U_type_to_hex(const Instruction U)
 {
     unsigned int decimal_value = 0;
     decimal_value += (U.instructionInfo.opcode);
     decimal_value += (U.rd << 7);
     decimal_value += (U.immediate << 12);
-    string str;
-    stringstream ss;
+    std::string str;
+    std::stringstream ss;
     ss << std::hex << decimal_value;
     str = ss.str();
     if (str.length() != 8)
     {
-        str = string(8 - str.length(), '0') + str;
+        str = std::string(8 - str.length(), '0') + str;
     }
     return str;
 }
 
-string J_type_to_hex(const Instruction J)
+std::string J_type_to_hex(const Instruction J)
 {
     unsigned int decimal_value = 0;
     int i = 0b100000000000000000000;
@@ -136,13 +134,13 @@ string J_type_to_hex(const Instruction J)
     decimal_value += (J.rd << 7);
     decimal_value += (J.instructionInfo.opcode);
 
-    string str;
-    stringstream ss;
+    std::string str;
+    std::stringstream ss;
     ss << std::hex << decimal_value;
     str = ss.str();
     if (str.length() != 8)
     {
-        str = string(8 - str.length(), '0') + str;
+        str = std::string(8 - str.length(), '0') + str;
     }
     return str;
 }

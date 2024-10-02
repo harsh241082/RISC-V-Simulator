@@ -1,11 +1,9 @@
 
 #include "../include/encoder.h"
 
-using namespace std;
-
-string InstructionToHex(Instruction instruct)
+std::string InstructionToHex(Instruction instruct)
 {
-    string hexCode;
+    std::string hexCode;
     if (instruct.error != "")
         return "error!!";
     switch (instruct.instructionInfo.format)
