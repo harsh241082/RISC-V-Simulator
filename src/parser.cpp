@@ -2,7 +2,7 @@
 
 using namespace std;
 
-Instruction parseInstruction(const std::string &line)
+Instruction parseInstruction(std::string &line)
 {
     vector<string> tokens = tokenize(line);
     Instruction instrction;

@@ -2,11 +2,15 @@
 
 using namespace std;
 
-vector<string> tokenize(const string &line)
+vector<string> tokenize(string &line)
 {
     vector<string> tokens;
     string token = "";
     string label;
+    while (line[0] == ' ')
+    {
+        line.erase(0, 1);
+    }
     for (int i = 0; i < line.length(); i++)
     {
         if (line[i] == '#' || line[i] == ';')
