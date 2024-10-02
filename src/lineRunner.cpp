@@ -251,6 +251,8 @@ void func_beq(Instruction instruct)
     {
         ProgramCounter += imm;
     }
+    else
+        ProgramCounter++;
 }
 void func_bne(Instruction instruct)
 {
@@ -261,6 +263,8 @@ void func_bne(Instruction instruct)
     {
         ProgramCounter += imm;
     }
+    else
+        ProgramCounter++;
 }
 void func_blt(Instruction instruct)
 {
@@ -271,6 +275,8 @@ void func_blt(Instruction instruct)
     {
         ProgramCounter += imm;
     }
+    else
+        ProgramCounter++;
 }
 void func_bge(Instruction instruct)
 {
@@ -281,6 +287,8 @@ void func_bge(Instruction instruct)
     {
         ProgramCounter += imm;
     }
+    else
+        ProgramCounter++;
 }
 void func_bltu(Instruction instruct)
 {
@@ -291,6 +299,8 @@ void func_bltu(Instruction instruct)
     {
         ProgramCounter += imm;
     }
+    else
+        ProgramCounter++;
 }
 void func_bgeu(Instruction instruct)
 {
@@ -301,6 +311,8 @@ void func_bgeu(Instruction instruct)
     {
         ProgramCounter += imm;
     }
+    else
+        ProgramCounter++;
 }
 void func_jal(Instruction instruct)
 {
