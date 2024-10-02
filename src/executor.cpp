@@ -5,6 +5,10 @@ bool breakPoints[4096] = {0};
 void RunTillBreakPoint(int totalLines)
 {
     int line = ProgramCounter;
+    if (breakPoints[ProgramCounter])
+        {
+            executeInstruction();
+        }
     while (ProgramCounter < totalLines)
     {
         if (breakPoints[ProgramCounter])

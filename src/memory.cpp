@@ -31,9 +31,10 @@ void showCallStack(int numLines)
     int sp = 16383;
     if (ProgramCounter >= numLines)
     {
-        cout << "Empty call Stack: Execution completed" << endl;
+        cout << "Empty call Stack: Execution completed" << endl
+             << endl;
         return;
-        }
+    }
     cout << "Call Stack:" << endl;
     cout << stackPointer << endl;
     if (stackPointer == 262145)
