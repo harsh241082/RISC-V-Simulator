@@ -81,7 +81,8 @@ int main()
         comment_ctr = 0;
     }
     int numLines = ProgramCounter;
-    std::cout << "Loaded the file succesfully" << std::endl;
+    std::cout << "Loaded the file succesfully" << std::endl
+              << std::endl;
     ProgramCounter = 0;
     input.close();
     InitCPU(cpu);
@@ -89,7 +90,23 @@ int main()
     std::cin >> command;
     while (command != "exit")
     {
-        if (command == "run")
+        if (command == "exit")
+        {
+            std::cout << "Exited the Simulator" << std::endl;
+        }
+        else if (command == "help")
+        {
+            std::cout << "run - to run the program\n"
+                      << "regs - to show the registers\n"
+                      << "mem - to show the memory\n"
+                      << "step - to execute the next instruction\n"
+                      << "show-stack - to show the call stack\n"
+                      << "break - to set a breakpoint\n"
+                      << "del break - to delete a breakpoint\n"
+                      << "exit - to exit the simulator\n"
+                      << std::endl;
+        }
+        else if (command == "run")
         {
             if (ProgramCounter >= numLines)
             {

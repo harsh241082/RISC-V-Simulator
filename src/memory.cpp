@@ -39,6 +39,7 @@ void showCallStack(int numLines)
     if (stackPointer == 1)
     {
         std::cout << "main:" << ProgramCounter << std::endl;
+        std::cout << std::endl;
         return;
     }
     int lineno = fechMemory(address, 8) / 4 - 1;
