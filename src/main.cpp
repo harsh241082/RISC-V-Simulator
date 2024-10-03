@@ -50,7 +50,7 @@ int main()
             storeData(StoreData);
         }
     }
-
+    std::cout << "Loaded the file succesfully" << std::endl;
     ProgramCounter = 0;
     EmptyLines[0] = 0;
     int comment_ctr = 0;
@@ -162,7 +162,8 @@ int main()
                 continue;
             }
             breakPoints[breakPoint - 1] = 0;
-            std::cout << std::endl;
+            std::cout << "breakpoint deleted at line " << breakPoint << std::endl
+                      << std::endl;
         }
         else
         {
@@ -171,7 +172,7 @@ int main()
         }
         std::cin >> command;
     }
-
+    std::cout << "Exited the Simulator" << std::endl;
     return 0;
 }
 #endif
