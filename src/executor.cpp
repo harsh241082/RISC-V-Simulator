@@ -6,9 +6,9 @@ void RunTillBreakPoint(int totalLines)
 {
     int line = ProgramCounter;
     if (breakPoints[ProgramCounter])
-        {
-            executeInstruction();
-        }
+    {
+        executeInstruction();
+    }
     while (ProgramCounter < totalLines)
     {
         if (breakPoints[ProgramCounter])
@@ -44,7 +44,11 @@ void executeInstruction()
             progctr = std::string(8 - progctr.length(), '0') + progctr;
         }
         progctr = "0x" + progctr;
-        std::cout << "Executed: " << instructionMemory[ProgramCounter] << "; PC = " << progctr << std::endl;
+        std::string line = instructionMemory[ProgramCounter];
+        int index = line.find(":");
+        if (index != std::string::npos)
+            line = line.substr(index + 2, line.length());
+        std::cout << "Executed: " << line << "; PC = " << progctr << std::endl;
         it->second(instruction);
         return;
     }
@@ -57,7 +61,11 @@ void executeInstruction()
         progctr = std::string(8 - progctr.length(), '0') + progctr;
     }
     progctr = "0x" + progctr;
-    std::cout << "Executed: " << instructionMemory[ProgramCounter] << "; PC = " << progctr << std::endl;
+    std::string line = instructionMemory[ProgramCounter];
+    int index = line.find(":");
+    if (index != std::string::npos)
+        line = line.substr(index + 2, line.length());
+    std::cout << "Executed: " << line << "; PC = " << progctr << std::endl;
     it->second(instruction);
     ProgramCounter++;
 }

@@ -320,7 +320,7 @@ void func_jal(Instruction instruct)
     SetRegister(cpu, rd_index, (ProgramCounter + 1) * 4);
     int imm = instruct.immediate / 4;
     ProgramCounter += imm;
-    stackPointer--;
+    stackPointer++;
 }
 void func_jalr(Instruction instruct)
 {
@@ -329,7 +329,7 @@ void func_jalr(Instruction instruct)
     SetRegister(cpu, rd_index, (ProgramCounter + 1) * 4);
     int imm = instruct.immediate / 4;
     ProgramCounter = rs1 + imm - 1;
-    stackPointer++;
+    stackPointer--;
 }
 void func_lui(Instruction instruct)
 {

@@ -42,18 +42,24 @@ int main()
             continue;
         else if (line.find(".data") != std::string::npos)
         {
+            std::string isText;
             while (getline(input, line))
             {
                 std::vector<std::string> StoreData = split(line);
+                isText = StoreData[0];
                 if (StoreData.size() == 0)
                 {
                     continue;
                 }
-                if (StoreData[0] == ".text")
+                if (isText == ".text")
                 {
                     break;
                 }
                 storeData(StoreData);
+            }
+            if (isText == ".text")
+            {
+                continue;
             }
         }
         Lines[ProgramCounter] = parseInstruction(line);

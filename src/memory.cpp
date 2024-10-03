@@ -1,7 +1,7 @@
 #include "../include/memory.h"
 char Memory[262145] = {0};
 std::string instructionMemory[4096] = {""};
-int stackPointer = 262145;
+int stackPointer = 1;
 int StoreDataAddr = 65536;
 void ShowMemory(std::string address, int count)
 {
@@ -28,36 +28,37 @@ void ShowMemory(std::string address, int count)
 
 void showCallStack(int numLines)
 {
-    int sp = 16383;
+    int sp = 1;
+    int address = 0x4fff8;
     if (ProgramCounter >= numLines)
     {
-        std::cout << "Empty call Stack: Execution completed" << std::endl
-                  << std::endl;
+        std::cout << "Empty call Stack: Execution completed" << std::endl;
         return;
     }
     std::cout << "Call Stack:" << std::endl;
-    std::cout << stackPointer << std::endl;
-    if (stackPointer == 262145)
+    if (stackPointer == 1)
     {
         std::cout << "main:" << ProgramCounter << std::endl;
         return;
     }
-    if (Lines[Memory[sp]].label != "main")
+    int lineno = fechMemory(address, 8) / 4 - 1;
+    std::cout << "main:" << lineno << std::endl;
+    sp++;
+    while (sp < stackPointer)
     {
-        char lineNo = Memory[sp];
-        std::cout << "main:" << static_cast<int>(lineNo) << std::endl;
-        sp--;
-    }
-    while (sp > stackPointer)
-    {
-        int lineNo = static_cast<int>(Memory[sp]);
         std::string label;
-        auto it = find_if(labelData.begin(), labelData.end(), [lineNo](const std::pair<std::string, int> &p)
-                          { return p.second == lineNo; });
-        label = it->first;
-        std::cout << label << ":" << lineNo << std::endl;
-        sp--;
+        label = Lines[lineno].label;
+        address -= 8;
+        lineno = fechMemory(address, 8);
+        std::cout << label << ":" << lineno + 1 << std::endl;
+        sp++;
     }
+    std::string label;
+    label = Lines[lineno].label;
+    address -= 8;
+    lineno = fechMemory(address, 8);
+    std::cout << label << ":" << ProgramCounter << std::endl;
+    std::cout << std::endl;
 }
 
 int fechMemory(int address, int Numbytes)
