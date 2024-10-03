@@ -133,3 +133,15 @@ int rigToInt(const std::string &num)
 
     return stoi(token);
 }
+
+std::vector<std::string> split(const std::string &str)
+{
+    std::vector<std::string> words;
+    std::istringstream iss(str);
+    std::string word;
+    while (iss >> word)
+    {
+        words.push_back(word);
+    }
+    return words;
+}

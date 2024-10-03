@@ -2,6 +2,7 @@
 char Memory[262145] = {0};
 std::string instructionMemory[4096] = {""};
 int stackPointer = 262145;
+int StoreDataAddr = 65536;
 void ShowMemory(std::string address, int count)
 {
     int addr = strToInt(address);
@@ -81,5 +82,77 @@ void storeMemory(int address, int Numbytes, int value)
         char num = static_cast<char>(value & 0xFF);
         Memory[address + i] = num;
         value = value >> 8;
+    }
+}
+
+void storeData(std::vector<std::string> StoreData)
+{
+    if (StoreData[0] == ".dword")
+    {
+        int data;
+        for (int i = 1; i < StoreData.size(); i++, StoreDataAddr += 8)
+        {
+            if (i == StoreData.size() - 1)
+            {
+                data = strToInt(StoreData[i].substr(0, StoreData[i].length()));
+            }
+            else
+            {
+
+                data = strToInt(StoreData[i].substr(0, StoreData[i].length() - 1));
+            }
+            storeMemory(StoreDataAddr, 8, data);
+        }
+    }
+    else if (StoreData[0] == ".half")
+    {
+        for (int i = 1; i < StoreData.size(); i++, StoreDataAddr += 2)
+        {
+            int data;
+            if (i == StoreData.size() - 1)
+            {
+                data = strToInt(StoreData[i].substr(0, StoreData[i].length()));
+            }
+            else
+            {
+
+                data = strToInt(StoreData[i].substr(0, StoreData[i].length() - 1));
+            }
+            storeMemory(StoreDataAddr, 2, data);
+        }
+    }
+    else if (StoreData[0] == ".word")
+    {
+        for (int i = 1; i < StoreData.size(); i++, StoreDataAddr += 4)
+        {
+            int data;
+            if (i == StoreData.size() - 1)
+            {
+                data = strToInt(StoreData[i].substr(0, StoreData[i].length()));
+            }
+            else
+            {
+
+                data = strToInt(StoreData[i].substr(0, StoreData[i].length() - 1));
+            }
+            storeMemory(StoreDataAddr, 4, data);
+        }
+    }
+    else if (StoreData[0] == ".byte")
+    {
+        for (int i = 1; i < StoreData.size(); i++, StoreDataAddr += 1)
+        {
+            int data;
+            if (i == StoreData.size() - 1)
+            {
+                data = strToInt(StoreData[i].substr(0, StoreData[i].length()));
+            }
+            else
+            {
+
+                data = strToInt(StoreData[i].substr(0, StoreData[i].length() - 1));
+            }
+            storeMemory(StoreDataAddr, 1, data);
+        }
     }
 }

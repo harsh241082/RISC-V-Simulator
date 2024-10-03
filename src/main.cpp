@@ -4,6 +4,7 @@
 #include "../include/parser.h"
 #include "../include/executor.h"
 #include <iostream>
+#include <random>
 #include <fstream>
 
 int main()
@@ -31,8 +32,25 @@ int main()
             std::cout << "load a file before exicuting any command" << std::endl;
         }
     }
-
     std::string line;
+    getline(input, line);
+    if (line.find(".data") != std::string::npos)
+    {
+        while (getline(input, line))
+        {
+            std::vector<std::string> StoreData = split(line);
+            if (StoreData.size() == 0)
+            {
+                continue;
+            }
+            if (StoreData[0] == ".text")
+            {
+                break;
+            }
+            storeData(StoreData);
+        }
+    }
+
     ProgramCounter = 0;
     EmptyLines[0] = 0;
     int comment_ctr = 0;
@@ -108,7 +126,8 @@ int main()
             std::cin >> breakPoint;
             if (breakPoint > numLines)
             {
-                std::cout << "invalid breakpoint" << std::endl;
+                std::cout << "invalid breakpoint\n"
+                          << std::endl;
                 std::cin >> command;
                 continue;
             }
@@ -123,19 +142,22 @@ int main()
             std::cin >> isBreak >> breakPoint;
             if (isBreak != "break")
             {
-                std::cout << "invalid command" << std::endl;
+                std::cout << "invalid command\n"
+                          << std::endl;
                 std::cin >> command;
                 continue;
             }
             if (breakPoint > numLines)
             {
-                std::cout << "invalid breakpoint" << std::endl;
+                std::cout << "invalid breakpoint\n"
+                          << std::endl;
                 std::cin >> command;
                 continue;
             }
             if (breakPoints[breakPoint - 1] == 0)
             {
-                std::cout << "breakpoint not found" << std::endl;
+                std::cout << "breakpoint not found\n"
+                          << std::endl;
                 std::cin >> command;
                 continue;
             }
@@ -144,7 +166,8 @@ int main()
         }
         else
         {
-            std::cout << "invalid command" << std::endl;
+            std::cout << "invalid command\n"
+                      << std::endl;
         }
         std::cin >> command;
     }
