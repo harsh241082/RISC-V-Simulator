@@ -18,11 +18,9 @@ This project focuses on supporting a subset of the RISC-V instruction set, speci
 
 ## Instructions
 
-- This application allows all formats even ecall and ebreak is supported.
 - The application is space sencitive. So bad spaces will cause the application to give error.
 - If any comment is present after a instrection there shoud be atleast one space between instructon and comment.
-- Project can only handle 50 lines excluding comments.
-- Any files with assembly code can be tested using `tester.py` irrespective of its name.
+- Project can handle upto 4096 lines excluding comments.
 
 ## Project Expandability
 
@@ -30,8 +28,8 @@ This project focuses on supporting a subset of the RISC-V instruction set, speci
 - New Instruction type can be added by making a function in `instruction.h`.
 - The maximum line of input file can be increased by just chenging the 50 in `data.h` and `data.cpp`.
 - The application can be made to support for pseudo-instructions by adding a new function in `instruction.h`
-- The project can  be made to support for more than one file by making a loop in `main.cpp` and calling  the `tester.py` for each file.
-- We can improve the  application by adding a GUI to it.
+- The project can be made to support for more than one file by making a loop in `main.cpp`.
+- We can improve the application by adding a GUI to it.
 
 ## Installation
 
@@ -44,7 +42,7 @@ make all
 Make all will compile the files and give you a riscv_asm.exe file which can be run using:
 
 ```console
-./riscv_sim
+./riscv_sim.exe
 ```
 
 Specific .o files can be compiled by the following commands:
@@ -54,6 +52,7 @@ make data.o
 make encorder.o
 make instruction.o
 make main.o
+make lineRunner.o
 make parser.o
 make utils.o
 make cpu.o
@@ -65,12 +64,6 @@ Then clean can be used to clean all the files:
 
 ```console
 make clean
-```
-
-Python file can be used to test the project.
-
-```console
-python tester.py
 ```
 
 ## Project Structure
@@ -98,7 +91,6 @@ The project is organized as follows:\
 │ └── memory.h \
 ├── test_cases \
 ├── Makefile \
-├── tester.py \
 └── README.md
 
 ## File Descriptions
@@ -109,14 +101,13 @@ The project is organized as follows:\
   - `instruction.cpp`: Contains Implementation of instruction functionalities.
   - `parser.cpp` : Implementation of parsing functionalities.
   - `utils.cpp` Implementation of common utility functions.
+  - `lineRunner.cpp` It contains all the functions for each instruction
   - `data.cpp`: Contains the strings and maps to store the data of the instructions.
-  - `cpu.cpp`: Implements the functionalities  of the CPU.
+  - `cpu.cpp`: Implements the functionalities of register store and register load.
   - `memory.cpp`: Implemests the memory opertions
-  - `executor.cpp`: Contains the implementation details required for execution of the decoded  instructions.
+  - `executor.cpp`: Contains the implementation details required for execution of the decoded instructions.
   - `main.cpp`: The entry point of the application.
 
 - **include/**: Contains all the Header files for the above source code files used in the project and an additional risc-v.h file.
   - `risc-v.h`: Contains the information about registers and instruction ,their corresponding opcode,funct values.
 - **Makefile**: Configuration file for Make to build the project..
-- **test_cases**: Contains all the files which have test cases.
-- **tester.py**: This file automaticaly test all the file is test_cases
