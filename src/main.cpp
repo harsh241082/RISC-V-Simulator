@@ -33,29 +33,29 @@ int main()
         }
     }
     std::string line;
-    getline(input, line);
-    if (line.find(".data") != std::string::npos)
-    {
-        while (getline(input, line))
-        {
-            std::vector<std::string> StoreData = split(line);
-            if (StoreData.size() == 0)
-            {
-                continue;
-            }
-            if (StoreData[0] == ".text")
-            {
-                break;
-            }
-            storeData(StoreData);
-        }
-    }
-    std::cout << "Loaded the file succesfully" << std::endl;
     ProgramCounter = 0;
     EmptyLines[0] = 0;
     int comment_ctr = 0;
     while (getline(input, line))
     {
+        if (line.find(".text") != std::string::npos)
+            continue;
+        else if (line.find(".data") != std::string::npos)
+        {
+            while (getline(input, line))
+            {
+                std::vector<std::string> StoreData = split(line);
+                if (StoreData.size() == 0)
+                {
+                    continue;
+                }
+                if (StoreData[0] == ".text")
+                {
+                    break;
+                }
+                storeData(StoreData);
+            }
+        }
         Lines[ProgramCounter] = parseInstruction(line);
         if (comment_ctr == 0)
         {
@@ -75,6 +75,7 @@ int main()
         comment_ctr = 0;
     }
     int numLines = ProgramCounter;
+    std::cout << "Loaded the file succesfully" << std::endl;
     ProgramCounter = 0;
     input.close();
     InitCPU(cpu);
