@@ -12,7 +12,7 @@ __int64 GetRegister(CPU *cpu, int regIndex)
 {
     return cpu->registers[regIndex];
 }
-void SetRegister(CPU *cpu, int regIndex, int value)
+void SetRegister(CPU *cpu, int regIndex, __int64 value)
 {
     if (regIndex != 0)
         cpu->registers[regIndex] = value;

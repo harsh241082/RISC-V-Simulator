@@ -116,3 +116,4 @@ The project is organized as follows:\
 - **Error 2:** endian format for store and load
 - **Error 3:** registers
 - **Error 4:** storage issues for dword
+- **Error 5:** memory access issues

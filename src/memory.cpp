@@ -62,24 +62,26 @@ void showCallStack(int numLines)
     std::cout << std::endl;
 }
 
-int fechMemory(int address, int Numbytes)
+__int64 fechMemory(int address, int Numbytes)
 {
     address = address - 65536;
-    int data = 0;
-    for (int i = 0; i < Numbytes; i++)
+    __int64 data = 0;
+    address = address + Numbytes - 1;
+    for (int i = Numbytes-1; i >=0; i--)
     {
         data = data << 8;
         int num = static_cast<int>(Memory[address]);
+        num = num & 0xFF;
         data = data | num;
-        address++;
+        address--;
     }
     return data;
 }
 
-void storeMemory(int address, int Numbytes, int value)
+void storeMemory(int address, int Numbytes, __int64 value)
 {
     address = address - 65536;
-    for (int i = Numbytes - 1; i >= 0; i--)
+    for (int i = 0;i < Numbytes;i++)
     {
         char num = static_cast<char>(value & 0xFF);
         Memory[address + i] = num;

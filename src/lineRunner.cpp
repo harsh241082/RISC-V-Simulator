@@ -159,7 +159,11 @@ void func_lb(Instruction instruct)
     __int64 rs1 = GetRegister(cpu, instruct.rs1);
     int imm = instruct.immediate;
     __int64 result = fechMemory(rs1 + imm, 1);
-    result = result & 0x000000FF;
+    int sign = result & 0x80;
+    if (sign == 0x80)
+    {
+        result = result | 0xFFFFFFFFFFFFFF00;
+    }
     SetRegister(cpu, rd_index, result);
 }
 void func_lh(Instruction instruct)
@@ -168,7 +172,11 @@ void func_lh(Instruction instruct)
     __int64 rs1 = GetRegister(cpu, instruct.rs1);
     int imm = instruct.immediate;
     __int64 result = fechMemory(rs1 + imm, 2);
-    result = result & 0x0000FFFF;
+    int sign = result & 0x8000;
+    if (sign == 0x8000)
+    {
+        result = result | 0xFFFFFFFFFFFF0000;
+    }
     SetRegister(cpu, rd_index, result);
 }
 void func_lw(Instruction instruct)
@@ -177,7 +185,11 @@ void func_lw(Instruction instruct)
     __int64 rs1 = GetRegister(cpu, instruct.rs1);
     int imm = instruct.immediate;
     __int64 result = fechMemory(rs1 + imm, 4);
-    result = result & 0xFFFFFFFF;
+    int sign = result & 0x80000000;
+    if (sign == 0x80000000)
+    {
+        result = result | 0xFFFFFFFF00000000;
+    }
     SetRegister(cpu, rd_index, result);
 }
 void func_ld(Instruction instruct)
@@ -212,6 +224,7 @@ void func_lwu(Instruction instruct)
     __int64 rs1 = GetRegister(cpu, instruct.rs1);
     int imm = instruct.immediate;
     unsigned __int64 result = fechMemory(rs1 + imm, 4);
+    result = result & 0xFFFFFFFF;
     SetRegister(cpu, rd_index, result);
 }
 void func_sb(Instruction instruct)

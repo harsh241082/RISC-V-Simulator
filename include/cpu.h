@@ -10,6 +10,6 @@ struct CPU
 extern CPU *cpu;
 void InitCPU(CPU *cpu);
 __int64 GetRegister(CPU *cpu, int regIndex);
-void SetRegister(CPU *cpu, int regIndex, int value);
+void SetRegister(CPU *cpu, int regIndex, __int64 value);
 void ShowRegisters(CPU *cpu);
 #endif
