@@ -170,6 +170,7 @@ int main()
         }
         else if (command == "regs")
         {
+            std::cout << "Registers:" << std::endl;
             ShowRegisters(cpu);
         }
         else if (command == "mem")
