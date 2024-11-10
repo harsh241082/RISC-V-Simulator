@@ -12,9 +12,11 @@ struct cache
     int cacheSize;
     int blockSize;
     int associativity;
+    int noSets;
     std::string replacementPolicy;
     std::string writeBackPolicy;
     cache() : cacheStatus(false), cacheSize(0), blockSize(0), associativity(0), replacementPolicy(""), writeBackPolicy("") {}
 };
 extern cache cacheData;
+void initCache();
 #endif

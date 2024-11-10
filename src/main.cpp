@@ -49,6 +49,14 @@ int main()
                 cacheData.blockSize = strToInt(data);
                 getline(input, data);
                 cacheData.associativity = strToInt(data);
+                if (cacheData.associativity == 0)
+                {
+                    cacheData.noSets = 1;
+                }
+                else
+                {
+                    cacheData.noSets = cacheData.cacheSize / (cacheData.blockSize * cacheData.associativity);
+                }
                 getline(input, data);
                 cacheData.replacementPolicy = data;
                 getline(input, data);
@@ -119,13 +127,10 @@ int main()
     InitCPU(cpu);
     std::string command;
     std::cin >> command;
+    initCache();
     while (command != "exit")
     {
-        if (command == "exit")
-        {
-            std::cout << "Exited the Simulator" << std::endl;
-        }
-        else if (command == "cache_sim")
+        if (command == "cache_sim")
         {
             std::string cacheQuary;
             std::cin >> cacheQuary;
@@ -155,6 +160,7 @@ int main()
                       << "break - to set a breakpoint\n"
                       << "del break - to delete a breakpoint\n"
                       << "exit - to exit the simulator\n"
+                      << "cache_sim status - to check the status of cache\n"
                       << std::endl;
         }
         else if (command == "run")

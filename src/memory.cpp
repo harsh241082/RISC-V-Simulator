@@ -3,6 +3,15 @@ char Memory[262145] = {0};
 std::string instructionMemory[4096] = {""};
 int stackPointer = 1;
 int StoreDataAddr = 65536;
+void initCache()
+{
+    if (cacheData.cacheStatus)
+    {
+        cache = new char[cacheData.cacheSize];
+        tagData = new int[cacheData.cacheSize / cacheData.blockSize]{};
+    }
+}
+
 void ShowMemory(std::string address, int count)
 {
     int addr = strToInt(address);
@@ -64,16 +73,37 @@ void showCallStack(int numLines)
 
 __int64 fechMemory(int address, int Numbytes)
 {
-    address = address - 65536;
+
     __int64 data = 0;
     address = address + Numbytes - 1;
-    for (int i = Numbytes-1; i >=0; i--)
+    for (int i = Numbytes - 1; i >= 0; i--)
     {
+        if (cacheData.cacheStatus)
+        {
+            int noOfBlockBits = std::log2(cacheData.blockSize);
+            int noOfSetBits = std::log2(cacheData.noSets);
+            int noOfLinesPerSet = cacheData.cacheSize / (cacheData.blockSize * cacheData.noSets);
+            int searchIndex = ((address >> noOfBlockBits) % cacheData.noSets) * noOfLinesPerSet;
+            int tag = address >> (noOfBlockBits + noOfSetBits);
+            // searching for the data in the cache
+            for (int i = 0; i < noOfLinesPerSet; i++)
+            {
+                if (tag == tagData[searchIndex + i])
+                {
+                    // hit case
+                    continue;
+                }
+            }
+            // miss case
+            // featching directly from main mem
+        }
+        address = address - 65536;
         data = data << 8;
         int num = static_cast<int>(Memory[address]);
         num = num & 0xFF;
         data = data | num;
         address--;
+        address = address + 65536;
     }
     return data;
 }
@@ -81,7 +111,7 @@ __int64 fechMemory(int address, int Numbytes)
 void storeMemory(int address, int Numbytes, __int64 value)
 {
     address = address - 65536;
-    for (int i = 0;i < Numbytes;i++)
+    for (int i = 0; i < Numbytes; i++)
     {
         char num = static_cast<char>(value & 0xFF);
         Memory[address + i] = num;
