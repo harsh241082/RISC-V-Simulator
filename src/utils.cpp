@@ -90,9 +90,9 @@ std::vector<std::string> tokenize(std::string &line)
     return tokens;
 }
 
-int strToInt(const std::string &num)
+int64_t strToInt(const std::string &num)
 {
-    int32_t i = 0;
+    int64_t i = 0;
     if (num[0] == '-')
     {
         std::string token = "";
@@ -101,11 +101,11 @@ int strToInt(const std::string &num)
             token += num[j];
         }
         if (token[1] == 'x')
-            i = stoi(token.substr(2, num.length() - 2), nullptr, 16);
+            i = stoll(token.substr(2, num.length() - 2), nullptr, 16);
         else if (token[1] == 'b')
-            i = stoi(token.substr(2, num.length() - 2), nullptr, 2);
+            i = stoll(token.substr(2, num.length() - 2), nullptr, 2);
         else
-            i = stoi(token);
+            i = stoll(token);
         i *= -1;
     }
     else
@@ -116,11 +116,11 @@ int strToInt(const std::string &num)
             token += num[j];
         }
         if (token[1] == 'x')
-            i = stoi(token.substr(2, num.length() - 2), nullptr, 16);
+            i = stoll(token.substr(2, num.length() - 2), nullptr, 16);
         else if (token[1] == 'b')
-            i = stoi(token.substr(2, num.length() - 2), nullptr, 2);
+            i = stoll(token.substr(2, num.length() - 2), nullptr, 2);
         else
-            i = stoi(token);
+            i = stoll(token);
     }
     return i;
 }

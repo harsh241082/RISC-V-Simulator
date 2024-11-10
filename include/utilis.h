@@ -11,7 +11,7 @@
 std::vector<std::string> tokenize(std::string &line);
 
 // converts string to int
-int strToInt(const std::string &num);
+int64_t strToInt(const std::string &num);
 
 // converts registers to int
 int rigToInt(const std::string &num);

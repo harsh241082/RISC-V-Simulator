@@ -91,7 +91,7 @@ void storeData(std::vector<std::string> StoreData)
 {
     if (StoreData[0] == ".dword")
     {
-        int data;
+        __int64 data;
         for (int i = 1; i < StoreData.size(); i++, StoreDataAddr += 8)
         {
             if (i == StoreData.size() - 1)
