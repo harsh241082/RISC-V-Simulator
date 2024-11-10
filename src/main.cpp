@@ -1,6 +1,6 @@
 #ifndef MAIN_CPP
 #define MAIN_CPP
-
+#include "../include/data.h"
 #include "../include/parser.h"
 #include "../include/executor.h"
 #include <iostream>
@@ -26,6 +26,39 @@ int main()
                 continue;
             }
             break;
+        }
+        else if (command == "cache_sim")
+        {
+            std::string cacheQuary;
+            std::cin >> cacheQuary;
+            if (cacheQuary == "enable")
+            {
+                std::cin >> fileName;
+                input.open(fileName);
+                if (!input.is_open())
+                {
+                    std::cout << "file not found" << std::endl;
+                    std::cout << "enter a valid file name" << std::endl;
+                    continue;
+                }
+                cacheData.cacheStatus = true;
+                std::string data;
+                getline(input, data);
+                cacheData.cacheSize = strToInt(data);
+                getline(input, data);
+                cacheData.blockSize = strToInt(data);
+                getline(input, data);
+                cacheData.associativity = strToInt(data);
+                getline(input, data);
+                cacheData.replacementPolicy = data;
+                getline(input, data);
+                cacheData.writeBackPolicy = data;
+                continue;
+            }
+            else if (cacheQuary == "disable")
+            {
+                cacheData.cacheStatus = false;
+            }
         }
         else
         {
@@ -93,6 +126,26 @@ int main()
         if (command == "exit")
         {
             std::cout << "Exited the Simulator" << std::endl;
+        }
+        else if (command == "cache_sim")
+        {
+            std::string cacheQuary;
+            std::cin >> cacheQuary;
+            if (cacheQuary == "status")
+            {
+                if (cacheData.cacheStatus == false)
+                {
+                    std::cout << "Cache is disabled" << std::endl;
+                    continue;
+                }
+                std::cout << "Cache is enabled" << std::endl;
+                std::cout << "Cache Status: " << cacheData.cacheStatus << std::endl;
+                std::cout << "Cache Size: " << cacheData.cacheSize << std::endl;
+                std::cout << "Block Size: " << cacheData.blockSize << std::endl;
+                std::cout << "Associativity: " << cacheData.associativity << std::endl;
+                std::cout << "Replacement Policy: " << cacheData.replacementPolicy << std::endl;
+                std::cout << "Write Back Policy: " << cacheData.writeBackPolicy << std::endl;
+            }
         }
         else if (command == "help")
         {
