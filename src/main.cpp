@@ -114,8 +114,6 @@ int main()
         comment_ctr = 0;
     }
     int numLines = ProgramCounter;
-    std::cout << "Loaded the file succesfully" << std::endl
-              << std::endl;
     ProgramCounter = 0;
     input.close();
     InitCPU(cpu);
