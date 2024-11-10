@@ -5,11 +5,11 @@
 #include <sstream>
 struct CPU
 {
-    int registers[32];
+    __int64 registers[32];
 };
 extern CPU *cpu;
 void InitCPU(CPU *cpu);
-int GetRegister(CPU *cpu, int regIndex);
+__int64 GetRegister(CPU *cpu, int regIndex);
 void SetRegister(CPU *cpu, int regIndex, int value);
 void ShowRegisters(CPU *cpu);
 #endif

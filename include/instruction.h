@@ -29,11 +29,11 @@ struct Instruction
 {
     InstructionInfo instructionInfo;
     std::string mnemonic;
-    int rd;
-    int rs1;
-    int rs2;
+    __int64 rd;
+    __int64 rs1;
+    __int64 rs2;
     std::string label;
-    int immediate;
+    __int64 immediate;
     std::string error;
     Instruction() : instructionInfo(InstructionInfo()), mnemonic(""), rd(0), rs1(0), rs2(0), label(""), immediate(0), error("") {}
 };

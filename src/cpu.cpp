@@ -8,7 +8,7 @@ void InitCPU(CPU *cpu)
         cpu->registers[i] = 0;
     }
 }
-int GetRegister(CPU *cpu, int regIndex)
+__int64 GetRegister(CPU *cpu, int regIndex)
 {
     return cpu->registers[regIndex];
 }

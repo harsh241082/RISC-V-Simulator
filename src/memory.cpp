@@ -110,7 +110,7 @@ void storeData(std::vector<std::string> StoreData)
     {
         for (int i = 1; i < StoreData.size(); i++, StoreDataAddr += 2)
         {
-            int data;
+            __int64 data;
             if (i == StoreData.size() - 1)
             {
                 data = strToInt(StoreData[i].substr(0, StoreData[i].length()));
@@ -127,7 +127,7 @@ void storeData(std::vector<std::string> StoreData)
     {
         for (int i = 1; i < StoreData.size(); i++, StoreDataAddr += 4)
         {
-            int data;
+            __int64 data;
             if (i == StoreData.size() - 1)
             {
                 data = strToInt(StoreData[i].substr(0, StoreData[i].length()));
@@ -144,7 +144,7 @@ void storeData(std::vector<std::string> StoreData)
     {
         for (int i = 1; i < StoreData.size(); i++, StoreDataAddr += 1)
         {
-            int data;
+            __int64 data;
             if (i == StoreData.size() - 1)
             {
                 data = strToInt(StoreData[i].substr(0, StoreData[i].length()));
