@@ -11,6 +11,7 @@ void initCache()
         cacheData.tagData = new int[cacheData.cacheSize / cacheData.blockSize]{};
         cacheData.hit = 0;
         cacheData.miss = 0;
+        cacheData.access = 0;
         cacheData.fifoQueue = new std::queue<int>[cacheData.noSets];
     }
 }
@@ -85,6 +86,7 @@ __int64 fechMemory(int address, int Numbytes)
         int noOfLinesPerSet = cacheData.cacheSize / (cacheData.blockSize * cacheData.noSets);
         int searchIndex = ((tempAddress >> noOfBlockBits) % cacheData.noSets) * noOfLinesPerSet * cacheData.blockSize;
         int tag = tempAddress >> (noOfBlockBits + noOfSetBits);
+        cacheData.access++;
         // searching for the data in the cache
         for (int i = 0; i < noOfLinesPerSet; i++, searchIndex += cacheData.blockSize)
         {

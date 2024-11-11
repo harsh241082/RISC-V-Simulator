@@ -14,7 +14,7 @@ struct cache
     int blockSize;
     int associativity;
     int noSets;
-    int hit, miss;
+    int hit, miss, access;
     char *cacheValues;
     int *tagData;
     std::string replacementPolicy;

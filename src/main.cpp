@@ -150,6 +150,24 @@ int main()
                 std::cout << "Replacement Policy: " << cacheData.replacementPolicy << std::endl;
                 std::cout << "Write Back Policy: " << cacheData.writeBackPolicy << std::endl;
             }
+            else if(cacheQuary == "disable")
+            {
+                cacheData.cacheStatus = false;
+            }
+            else if(cacheQuary == "stats"){
+                std::cout << "D-cache statistics: Accesses=" << cacheData.access << ", Hit=" << cacheData.hit << ", Miss=" << cacheData.miss <<", Hit Rate=" << cacheData.hit/cacheData.access << std::endl;
+            }
+            else if (cacheQuary == "invalidate")
+            {
+                //set all the valid bits to 0
+                for (int i = 0; i < cacheData.cacheSize; i++)
+                {
+                    cacheData.tagData[i] = 0;
+                }
+            }
+            else{
+                std::cout << "Invalid command" << std::endl;
+            }
         }
         else if (command == "help")
         {
