@@ -33,9 +33,10 @@ int main()
             std::cin >> cacheQuary;
             if (cacheQuary == "enable")
             {
+                std::ifstream cacheInput;
                 std::cin >> fileName;
-                input.open(fileName);
-                if (!input.is_open())
+                cacheInput.open(fileName);
+                if (!cacheInput.is_open())
                 {
                     std::cout << "file not found" << std::endl;
                     std::cout << "enter a valid file name" << std::endl;
@@ -43,11 +44,11 @@ int main()
                 }
                 cacheData.cacheStatus = true;
                 std::string data;
-                getline(input, data);
+                getline(cacheInput, data);
                 cacheData.cacheSize = strToInt(data);
-                getline(input, data);
+                getline(cacheInput, data);
                 cacheData.blockSize = strToInt(data);
-                getline(input, data);
+                getline(cacheInput, data);
                 cacheData.associativity = strToInt(data);
                 if (cacheData.associativity == 0)
                 {
@@ -57,9 +58,9 @@ int main()
                 {
                     cacheData.noSets = cacheData.cacheSize / (cacheData.blockSize * cacheData.associativity);
                 }
-                getline(input, data);
+                getline(cacheInput, data);
                 cacheData.replacementPolicy = data;
-                getline(input, data);
+                getline(cacheInput, data);
                 cacheData.writeBackPolicy = data;
                 continue;
             }

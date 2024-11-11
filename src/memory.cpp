@@ -82,7 +82,7 @@ __int64 fechMemory(int address, int Numbytes)
         int noOfBlockBits = std::log2(cacheData.blockSize);
         int noOfSetBits = std::log2(cacheData.noSets);
         int noOfLinesPerSet = cacheData.cacheSize / (cacheData.blockSize * cacheData.noSets);
-        int searchIndex = ((tempAddress >> noOfBlockBits) % cacheData.noSets) * noOfLinesPerSet;
+        int searchIndex = ((tempAddress >> noOfBlockBits) % cacheData.noSets) * noOfLinesPerSet * cacheData.blockSize; 
         int tag = tempAddress >> (noOfBlockBits + noOfSetBits);
         // searching for the data in the cache
         for (int i = 0; i < noOfLinesPerSet; i++, searchIndex += cacheData.blockSize)
@@ -91,7 +91,7 @@ __int64 fechMemory(int address, int Numbytes)
             {
                 // cacheData.hit case
                 cacheData.hit++;
-                searchIndex += Numbytes - 1;
+                searchIndex += Numbytes - 1 + (tempAddress % cacheData.blockSize);
                 for (int j = Numbytes - 1; j >= 0; j--)
                 {
                     data = data << 8;
@@ -105,7 +105,7 @@ __int64 fechMemory(int address, int Numbytes)
         }
         // cacheData.miss case
         cacheData.miss++;
-        searchIndex = ((tempAddress >> noOfBlockBits) % cacheData.noSets) * noOfLinesPerSet;
+        searchIndex = ((tempAddress >> noOfBlockBits) % cacheData.noSets) * noOfLinesPerSet * cacheData.blockSize;
         for (int i = 0; i < noOfLinesPerSet; i++, searchIndex += cacheData.blockSize)
         {
             if ((cacheData.tagData[searchIndex / cacheData.blockSize] >> 31) == 0)
@@ -113,16 +113,24 @@ __int64 fechMemory(int address, int Numbytes)
 
                 tempAddress -= (tempAddress % cacheData.blockSize);
                 tempAddress = tempAddress - 65536;
-                for (int i = 0; i < cacheData.blockSize; i++)
+                for (int j = 0; j < cacheData.blockSize; j++)
                 {
                     char num = Memory[tempAddress];
                     cacheData.cacheValues[searchIndex] = num;
                     searchIndex++;
                     tempAddress++;
                 }
+                searchIndex -= cacheData.blockSize;
+                tag |= 1 << 31;
+                int pcBits = ProgramCounter << 24;
+                pcBits = pcBits >> 2; 
+                tag |= pcBits;
+                cacheData.tagData[searchIndex / cacheData.blockSize] = tag;
                 break;
             }
         }
+        searchIndex = ((tempAddress >> noOfBlockBits) % cacheData.noSets) * noOfLinesPerSet * cacheData.blockSize;
+        // replacement polecy
     }
     // featching directly from main mem
     address = address + Numbytes - 1;
