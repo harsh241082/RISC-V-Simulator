@@ -7,8 +7,10 @@ void initCache()
 {
     if (cacheData.cacheStatus)
     {
-        cache = new char[cacheData.cacheSize];
-        tagData = new int[cacheData.cacheSize / cacheData.blockSize]{};
+        cacheData.cacheValues = new char[cacheData.cacheSize];
+        cacheData.tagData = new int[cacheData.cacheSize / cacheData.blockSize]{};
+        cacheData.hit = 0;
+        cacheData.miss = 0;
     }
 }
 
@@ -73,37 +75,65 @@ void showCallStack(int numLines)
 
 __int64 fechMemory(int address, int Numbytes)
 {
-
     __int64 data = 0;
+    int tempAddress = address;
+    if (cacheData.cacheStatus)
+    {
+        int noOfBlockBits = std::log2(cacheData.blockSize);
+        int noOfSetBits = std::log2(cacheData.noSets);
+        int noOfLinesPerSet = cacheData.cacheSize / (cacheData.blockSize * cacheData.noSets);
+        int searchIndex = ((tempAddress >> noOfBlockBits) % cacheData.noSets) * noOfLinesPerSet;
+        int tag = tempAddress >> (noOfBlockBits + noOfSetBits);
+        // searching for the data in the cache
+        for (int i = 0; i < noOfLinesPerSet; i++, searchIndex += cacheData.blockSize)
+        {
+            if ((tag << 12) == (cacheData.tagData[searchIndex / cacheData.blockSize] << 12))
+            {
+                // cacheData.hit case
+                cacheData.hit++;
+                searchIndex += Numbytes - 1;
+                for (int j = Numbytes - 1; j >= 0; j--)
+                {
+                    data = data << 8;
+                    int num = static_cast<int>(cacheData.cacheValues[searchIndex]);
+                    num = num & 0xFF;
+                    data |= num;
+                    searchIndex--;
+                }
+                return data;
+            }
+        }
+        // cacheData.miss case
+        cacheData.miss++;
+        searchIndex = ((tempAddress >> noOfBlockBits) % cacheData.noSets) * noOfLinesPerSet;
+        for (int i = 0; i < noOfLinesPerSet; i++, searchIndex += cacheData.blockSize)
+        {
+            if ((cacheData.tagData[searchIndex / cacheData.blockSize] >> 31) == 0)
+            {
+
+                tempAddress -= (tempAddress % cacheData.blockSize);
+                tempAddress = tempAddress - 65536;
+                for (int i = 0; i < cacheData.blockSize; i++)
+                {
+                    char num = Memory[tempAddress];
+                    cacheData.cacheValues[searchIndex] = num;
+                    searchIndex++;
+                    tempAddress++;
+                }
+                break;
+            }
+        }
+    }
+    // featching directly from main mem
     address = address + Numbytes - 1;
+    address = address - 65536;
     for (int i = Numbytes - 1; i >= 0; i--)
     {
-        if (cacheData.cacheStatus)
-        {
-            int noOfBlockBits = std::log2(cacheData.blockSize);
-            int noOfSetBits = std::log2(cacheData.noSets);
-            int noOfLinesPerSet = cacheData.cacheSize / (cacheData.blockSize * cacheData.noSets);
-            int searchIndex = ((address >> noOfBlockBits) % cacheData.noSets) * noOfLinesPerSet;
-            int tag = address >> (noOfBlockBits + noOfSetBits);
-            // searching for the data in the cache
-            for (int i = 0; i < noOfLinesPerSet; i++)
-            {
-                if (tag == tagData[searchIndex + i])
-                {
-                    // hit case
-                    continue;
-                }
-            }
-            // miss case
-            // featching directly from main mem
-        }
-        address = address - 65536;
         data = data << 8;
         int num = static_cast<int>(Memory[address]);
         num = num & 0xFF;
         data = data | num;
         address--;
-        address = address + 65536;
     }
     return data;
 }

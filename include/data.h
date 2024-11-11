@@ -13,6 +13,9 @@ struct cache
     int blockSize;
     int associativity;
     int noSets;
+    int hit, miss;
+    char *cacheValues;
+    int *tagData;
     std::string replacementPolicy;
     std::string writeBackPolicy;
     cache() : cacheStatus(false), cacheSize(0), blockSize(0), associativity(0), replacementPolicy(""), writeBackPolicy("") {}

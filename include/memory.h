@@ -16,6 +16,4 @@ void storeMemory(int address, int Numbytes, __int64 value);
 __int64 fechMemory(int address, int Numbytes);
 void showCallStack(int numLines);
 void storeData(std::vector<std::string> StoreData);
-extern char *cache;
-extern int *tagData;
 #endif
