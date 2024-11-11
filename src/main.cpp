@@ -201,7 +201,7 @@ int main()
         }
         else if (command == "show-stack")
         {
-            showCallStack(numLines);
+            std::cout << "Stack not implemented properly" << std::endl;
         }
         else if (command == "break")
         {
@@ -256,7 +256,6 @@ int main()
         std::cin >> command;
     }
     std::cout << "Exited the Simulator" << std::endl;
-    std::cout << cacheData.hit << " hits and " << cacheData.miss << " misses" << std::endl;
     return 0;
 }
 #endif

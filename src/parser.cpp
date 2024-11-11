@@ -98,7 +98,6 @@ Instruction parseInstruction(std::string &line)
             if (instrction.immediate > 2047 || instrction.immediate < -2048)
             {
                 instrction.error = "immediate value out of range";
-                return instrction;
             }
         }
         catch (const std::exception &e)

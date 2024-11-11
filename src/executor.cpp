@@ -24,11 +24,11 @@ void RunTillBreakPoint(int totalLines)
 void executeInstruction()
 {
     Instruction instruction = Lines[ProgramCounter];
-    if (instruction.error != "")
+    if(instruction.error != "")
     {
-        std::cout << instruction.error << std::endl;
+        std::cout << "Error: " << instruction.error << "at line " << ProgramCounter+1 << std::endl;
         ProgramCounter++;
-        abort();
+        exit(0);
     }
     if (instruction.instructionInfo.format == InstructionFormat::B_TYPE || instruction.instructionInfo.format == InstructionFormat::J_TYPE)
     {
