@@ -150,22 +150,24 @@ int main()
                 std::cout << "Replacement Policy: " << cacheData.replacementPolicy << std::endl;
                 std::cout << "Write Back Policy: " << cacheData.writeBackPolicy << std::endl;
             }
-            else if(cacheQuary == "disable")
+            else if (cacheQuary == "disable")
             {
                 cacheData.cacheStatus = false;
             }
-            else if(cacheQuary == "stats"){
-                std::cout << "D-cache statistics: Accesses=" << cacheData.access << ", Hit=" << cacheData.hit << ", Miss=" << cacheData.miss <<", Hit Rate=" << cacheData.hit/cacheData.access << std::endl;
+            else if (cacheQuary == "stats")
+            {
+                std::cout << "D-cache statistics: Accesses=" << cacheData.access << ", Hit=" << cacheData.hit << ", Miss=" << cacheData.miss << ", Hit Rate=" << cacheData.hit / cacheData.access << std::endl;
             }
             else if (cacheQuary == "invalidate")
             {
-                //set all the valid bits to 0
+                // set all the valid bits to 0
                 for (int i = 0; i < cacheData.cacheSize; i++)
                 {
                     cacheData.tagData[i] = 0;
                 }
             }
-            else{
+            else
+            {
                 std::cout << "Invalid command" << std::endl;
             }
         }
@@ -180,6 +182,9 @@ int main()
                       << "del break - to delete a breakpoint\n"
                       << "exit - to exit the simulator\n"
                       << "cache_sim status - to check the status of cache\n"
+                      << "cache_sim disable - to disable the cache\n"
+                      << "cache_sim stats - to check the cache statistics\n"
+                      << "cache_sim invalidate - to invalidate the cache\n"
                       << std::endl;
         }
         else if (command == "run")
