@@ -7,6 +7,9 @@
 #include <string>
 #include <cmath>
 #include <algorithm>
+#include <random>
+#include <ctime>
+#include <queue>
 extern std::string instructionMemory[4096];
 extern char Memory[262145];
 extern int stackPointer;

@@ -11,6 +11,7 @@ void initCache()
         cacheData.tagData = new int[cacheData.cacheSize / cacheData.blockSize]{};
         cacheData.hit = 0;
         cacheData.miss = 0;
+        cacheData.fifoQueue = new std::queue<int>[cacheData.noSets];
     }
 }
 
@@ -91,6 +92,11 @@ __int64 fechMemory(int address, int Numbytes)
             {
                 // cacheData.hit case
                 cacheData.hit++;
+                tag |= 1 << 31;
+                int pcBits = ProgramCounter << 24;
+                pcBits = pcBits >> 2;
+                tag |= pcBits;
+                cacheData.tagData[searchIndex / cacheData.blockSize] = tag;
                 searchIndex += Numbytes - 1 + (tempAddress % cacheData.blockSize);
                 for (int j = Numbytes - 1; j >= 0; j--)
                 {
@@ -110,7 +116,12 @@ __int64 fechMemory(int address, int Numbytes)
         {
             if ((cacheData.tagData[searchIndex / cacheData.blockSize] >> 31) == 0)
             {
-
+                int setNo = (tempAddress >> noOfBlockBits) % cacheData.noSets;
+                cacheData.fifoQueue[setNo].push(searchIndex / cacheData.blockSize);
+                tag |= 1 << 31;
+                int pcBits = ProgramCounter << 24;
+                pcBits = pcBits >> 2;
+                tag |= pcBits;
                 tempAddress -= (tempAddress % cacheData.blockSize);
                 tempAddress = tempAddress - 65536;
                 for (int j = 0; j < cacheData.blockSize; j++)
@@ -121,17 +132,90 @@ __int64 fechMemory(int address, int Numbytes)
                     tempAddress++;
                 }
                 searchIndex -= cacheData.blockSize;
-                tag |= 1 << 31;
-                int pcBits = ProgramCounter << 24;
-                pcBits = pcBits >> 2;
-                tag |= pcBits;
                 cacheData.tagData[searchIndex / cacheData.blockSize] = tag;
                 break;
             }
         }
         tempAddress = address;
         searchIndex = ((tempAddress >> noOfBlockBits) % cacheData.noSets) * noOfLinesPerSet * cacheData.blockSize;
-        // replacement polecy
+        if (cacheData.replacementPolicy == "RANDOM")
+        {
+            srand(time(0));
+            int lineNo = rand() % noOfLinesPerSet;
+            searchIndex += lineNo * cacheData.blockSize;
+            tempAddress -= (tempAddress % cacheData.blockSize);
+            tempAddress = tempAddress - 65536;
+            for (int j = 0; j < cacheData.blockSize; j++)
+            {
+                char num = Memory[tempAddress];
+                cacheData.cacheValues[searchIndex] = num;
+                searchIndex++;
+                tempAddress++;
+            }
+            searchIndex -= cacheData.blockSize;
+            tag |= 1 << 31;
+            int pcBits = ProgramCounter << 24;
+            pcBits = pcBits >> 2;
+            tag |= pcBits;
+            cacheData.tagData[searchIndex / cacheData.blockSize] = tag;
+        }
+        else if (cacheData.replacementPolicy == "LRU")
+        {
+            int min;
+            int minIndex;
+            for (int i = 0; i < noOfLinesPerSet; i++, searchIndex += cacheData.blockSize)
+            {
+                if (i == 0)
+                {
+                    min = cacheData.tagData[searchIndex / cacheData.blockSize] & 0x7F800000;
+                }
+                if ((cacheData.tagData[searchIndex / cacheData.blockSize] & 0x7F800000) < min)
+                {
+                    min = cacheData.tagData[searchIndex / cacheData.blockSize] & 0x7F800000;
+                    minIndex = i;
+                }
+            }
+            searchIndex = ((tempAddress >> noOfBlockBits) % cacheData.noSets) * noOfLinesPerSet * cacheData.blockSize;
+            searchIndex += minIndex * cacheData.blockSize;
+            tempAddress -= (tempAddress % cacheData.blockSize);
+            tempAddress = tempAddress - 65536;
+            for (int j = 0; j < cacheData.blockSize; j++)
+            {
+                char num = Memory[tempAddress];
+                cacheData.cacheValues[searchIndex] = num;
+                searchIndex++;
+                tempAddress++;
+            }
+            searchIndex -= cacheData.blockSize;
+            tag |= 1 << 31;
+            int pcBits = ProgramCounter << 24;
+            pcBits = pcBits >> 2;
+            tag |= pcBits;
+            cacheData.tagData[searchIndex / cacheData.blockSize] = tag;
+        }
+        else if (cacheData.replacementPolicy == "FIFO")
+        {
+            int setNo = (tempAddress >> noOfBlockBits) % cacheData.noSets;
+            int lineNo = cacheData.fifoQueue[setNo].front();
+            cacheData.fifoQueue[setNo].pop();
+            cacheData.fifoQueue[setNo].push(lineNo);
+            searchIndex += lineNo * cacheData.blockSize;
+            tempAddress -= (tempAddress % cacheData.blockSize);
+            tempAddress = tempAddress - 65536;
+            for (int j = 0; j < cacheData.blockSize; j++)
+            {
+                char num = Memory[tempAddress];
+                cacheData.cacheValues[searchIndex] = num;
+                searchIndex++;
+                tempAddress++;
+            }
+            searchIndex -= cacheData.blockSize;
+            tag |= 1 << 31;
+            int pcBits = ProgramCounter << 24;
+            pcBits = pcBits >> 2;
+            tag |= pcBits;
+            cacheData.tagData[searchIndex / cacheData.blockSize] = tag;
+        }
     }
     // featching directly from main mem
     address = address + Numbytes - 1;
