@@ -24,6 +24,12 @@ void RunTillBreakPoint(int totalLines)
 void executeInstruction()
 {
     Instruction instruction = Lines[ProgramCounter];
+    if (instruction.error != "")
+    {
+        std::cout << instruction.error << std::endl;
+        ProgramCounter++;
+        abort();
+    }
     if (instruction.instructionInfo.format == InstructionFormat::B_TYPE || instruction.instructionInfo.format == InstructionFormat::J_TYPE)
     {
         auto labit = labelData.find(instruction.label);
