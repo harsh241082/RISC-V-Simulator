@@ -5,6 +5,11 @@ Instruction parseInstruction(std::string &line)
     std::vector<std::string> tokens = tokenize(line);
     Instruction instrction;
 
+    if (tokens.size() > 4)
+    {
+        instrction.error = "invalid number of arguments";
+        return instrction;
+    }
     if (tokens.size() == 0)
     {
         instrction.error = "empty line";
@@ -90,6 +95,11 @@ Instruction parseInstruction(std::string &line)
             instrction.rd = rigToInt(tokens[1]);
             instrction.rs1 = rigToInt(tokens[2]);
             instrction.immediate = strToInt(tokens[3]);
+            if (instrction.immediate > 2047 || instrction.immediate < -2048)
+            {
+                instrction.error = "immediate value out of range";
+                return instrction;
+            }
         }
         catch (const std::exception &e)
         {

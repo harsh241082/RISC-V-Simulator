@@ -48,7 +48,6 @@ std::vector<std::string> tokenize(std::string &line)
     size_t index = tokens[2].find("(");
     if (index != std::string::npos)
     {
-        tokens.resize(4);
         std::string token = tokens[2];
         std::string newToken = "";
         int j;
