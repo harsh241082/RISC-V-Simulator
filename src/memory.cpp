@@ -133,7 +133,7 @@ __int64 fechMemory(int address, int Numbytes)
                 }
                 searchIndex -= cacheData.blockSize;
                 cacheData.tagData[searchIndex / cacheData.blockSize] = tag;
-                break;
+                goto end;
             }
         }
         tempAddress = address;
@@ -162,7 +162,7 @@ __int64 fechMemory(int address, int Numbytes)
         else if (cacheData.replacementPolicy == "LRU")
         {
             int min;
-            int minIndex;
+            int minIndex=0;
             for (int i = 0; i < noOfLinesPerSet; i++, searchIndex += cacheData.blockSize)
             {
                 if (i == 0)
@@ -218,6 +218,7 @@ __int64 fechMemory(int address, int Numbytes)
         }
     }
     // featching directly from main mem
+    end:
     address = address + Numbytes - 1;
     address = address - 65536;
     for (int i = Numbytes - 1; i >= 0; i--)

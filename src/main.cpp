@@ -256,6 +256,7 @@ int main()
         std::cin >> command;
     }
     std::cout << "Exited the Simulator" << std::endl;
+    std::cout << cacheData.hit << " hits and " << cacheData.miss << " misses in cache" << std::endl;
     return 0;
 }
 #endif
