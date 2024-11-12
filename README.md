@@ -1,6 +1,6 @@
 # RISC-V-Simulator
 
-The primary objective of this project is to design and implement a RISC-V Simulator capable of running the given RISC-V assembly instructions using a C++ program.
+The primary objective of this project is to design and implement a RISC-V Simulator capable of running the given RISC-V assembly instructions using a C++ program with Cache options.
 
 ## Table of Contents
 
@@ -14,7 +14,7 @@ The primary objective of this project is to design and implement a RISC-V Simula
 
 ## Overview
 
-This project focuses on supporting a subset of the RISC-V instruction set, specifically the base integer instruction set (RV32I), which is commonly used in educational and industrial applications. The simulator is designed to handle different instruction formats such as R-type,I-type,S-type,B-type,U-type and J-type instructions but doesn't support for pseudo-instructions that simplify assembly programming.
+The project is designed to implement a RISC-V simulator which is capable of running the RISC-V assembly instructions using C++ program with Command line interface.This supports only a subset of instructions i.e only R, I, S, B, U and J type instructions not any pseudo instructions.The simulator is enhanced with the cache simulation which supports 3 types of replacement policies(FIFO,LRU,RANDOM) and two write policies(WB with no allocate and WT with allocate)
 
 ## Instructions
 
@@ -26,7 +26,7 @@ This project focuses on supporting a subset of the RISC-V instruction set, speci
 
 - If needed more instructions can be added to the `risc_v.h` file.
 - New Instruction type can be added by making a function in `instruction.h`.
-- The maximum line of input file can be increased by just chenging the 50 in `data.h` and `data.cpp`.
+- The maximum line of input file can be increased by just changing the 4096 in `data.h` and `data.cpp`.
 - The application can be made to support for pseudo-instructions by adding a new function in `instruction.h`
 - The project can be made to support for more than one file by making a loop in `main.cpp`.
 - We can improve the application by adding a GUI to it.
@@ -70,28 +70,30 @@ make clean
 
 The project is organized as follows:\
 ├─ src\
+│ ├── cpu.cpp \
 │ ├── data.cpp \
 │ ├── encoder.cpp \
-│ ├── instruction.cpp \
-│ ├── parser.cpp \
-│ ├── main.cpp \
-│ ├── utils.cpp \
-│ ├── cpu.cpp \
 │ ├── executor.cpp \
-│ └── memory.cpp \
+│ ├── instruction.cpp \
+│ ├── lineRunner.cpp \
+│ ├── main.cpp \
+│ ├── memory.cpp \
+│ ├── parser.cpp \
+│ └── utils.cpp \
 ├── include \
+│ ├── cpu.h \
 │ ├── data.h \
 │ ├── encoder.h \
+│ ├── executor.h \
 │ ├── instruction.h \
+│ ├── lineRunner.h \
+│ ├── memory.h \
 │ ├── parser.h \
 │ ├── risc-v.h \
-│ ├── utils.h \
-│ ├── cpu.h \
-│ ├── executor.h \
-│ └── memory.h \
-├── test_cases \
+│ └── utils.h \
 ├── Makefile \
-└── README.md
+├── README.md \
+└── report.pdf 
 
 ## File Descriptions
 
@@ -111,3 +113,4 @@ The project is organized as follows:\
 - **include/**: Contains all the Header files for the above source code files used in the project and an additional risc-v.h file.
   - `risc-v.h`: Contains the information about registers and instruction ,their corresponding opcode,funct values.
 - **Makefile**: Configuration file for Make to build the project..
+- **Report**: Contains the brief description each file and functions in them.Example usage of the project and the output of the project.
