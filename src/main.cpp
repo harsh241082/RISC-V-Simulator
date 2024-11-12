@@ -241,6 +241,7 @@ int main()
                 continue;
             }
             RunTillBreakPoint(numLines);
+            printf("D-cache statistics: Accesses=%d, Hit=%d, Miss=%d, Hit Rate=%.2f\n\n", (cacheData.hit + cacheData.miss), cacheData.hit, cacheData.miss, (float)cacheData.hit / (cacheData.hit + cacheData.miss));
         }
         else if (command == "regs")
         {

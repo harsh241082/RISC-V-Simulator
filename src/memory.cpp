@@ -80,7 +80,7 @@ __int64 fechMemory(int address, int Numbytes)
         cacheData.miss++;
         searchIndex = ((tempAddress >> noOfBlockBits) % cacheData.noSets) * noOfLinesPerSet * cacheData.blockSize;
         bool isDirty = cacheData.tagData[searchIndex / cacheData.blockSize] & (1 << 30);
-        CacheResult << "R: Address: 0x" << std::hex << address << ", Set: 0x" << std::hex << (cacheData.associativity ? (searchIndex / cacheData.blockSize) / cacheData.associativity : 0) << ", Miss, Tag: 0x" << std::hex << tag << ", " << (isDirty ? "Dirty" : "Clean") << std::endl;
+        CacheResult << "R: Address: 0x" << std::hex << address << ", Set: 0x" << std::hex << (cacheData.associativity ? (searchIndex / cacheData.blockSize) / cacheData.associativity : 0) << ", Miss, Tag: 0x" << std::hex << tag << ", " << "Clean" << std::endl;
         for (int i = 0; i < noOfLinesPerSet; i++, searchIndex += cacheData.blockSize)
         {
             if ((cacheData.tagData[searchIndex / cacheData.blockSize] >> 31) == 0)
