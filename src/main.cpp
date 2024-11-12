@@ -16,7 +16,7 @@ int main()
     while (true)
     {
         std::cin >> command;
-            start:
+    start:
         if (command == "load")
         {
             std::cin >> fileName;
@@ -184,7 +184,12 @@ int main()
             }
             else if (cacheQuary == "stats")
             {
-                printf("D-cache statistics: Accesses=%d, Hit=%d, Miss=%d, Hit Rate=%.2f\n\n", (cacheData.hit + cacheData.miss), cacheData.hit, cacheData.miss, (float)cacheData.hit / (cacheData.hit + cacheData.miss));
+                if (cacheData.cacheStatus == false)
+                {
+                    std::cout << "Cache is disabled" << std::endl;
+                    continue;
+                }
+                printf("D-cache statistics: Accesses=%d, Hit=%d, Miss=%d, Hit Rate=%.2f\n\n", (cacheData.hit + cacheData.miss), cacheData.hit, cacheData.miss, ((cacheData.hit + cacheData.miss) ? ((float)cacheData.hit / (cacheData.hit + cacheData.miss)) : 0));
             }
             else if (cacheQuary == "invalidate")
             {
@@ -200,7 +205,7 @@ int main()
                 std::cout << "Invalid command" << std::endl;
             }
         }
-        else if(command == "load")
+        else if (command == "load")
         {
             Memory[262145] = {0};
             instructionMemory[4096] = {""};
@@ -241,7 +246,7 @@ int main()
                 continue;
             }
             RunTillBreakPoint(numLines);
-            printf("D-cache statistics: Accesses=%d, Hit=%d, Miss=%d, Hit Rate=%.2f\n\n", (cacheData.hit + cacheData.miss), cacheData.hit, cacheData.miss, (float)cacheData.hit / (cacheData.hit + cacheData.miss));
+            printf("D-cache statistics: Accesses=%d, Hit=%d, Miss=%d, Hit Rate=%.2f\n\n", (cacheData.hit + cacheData.miss), cacheData.hit, cacheData.miss, ((cacheData.hit + cacheData.miss) != 0 ? ((float)cacheData.hit / (cacheData.hit + cacheData.miss)) : 0));
         }
         else if (command == "regs")
         {

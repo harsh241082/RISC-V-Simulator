@@ -1,4 +1,4 @@
-all: final cleano
+all: final 
 
 final: src/data.o src/encorder.o src/instruction.o src/main.o src/parser.o src/utils.o src/cpu.o src/memory.o src/executor.o src/lineRunner.o
 	g++ src/*.o -o riscv_sim
