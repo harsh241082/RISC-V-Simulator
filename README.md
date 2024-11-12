@@ -106,7 +106,7 @@ The project is organized as follows:\
   - `lineRunner.cpp` It contains all the functions for each instruction
   - `data.cpp`: Contains the strings and maps to store the data of the instructions.
   - `cpu.cpp`: Implements the functionalities of register store and register load.
-  - `memory.cpp`: Implemests the memory opertions
+  - `memory.cpp`: Implements the memory opertions on both the cache memory and main memory.
   - `executor.cpp`: Contains the implementation details required for execution of the decoded instructions.
   - `main.cpp`: The entry point of the application.
 

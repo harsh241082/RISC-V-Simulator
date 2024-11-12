@@ -152,6 +152,7 @@ void storeMemory(int address, int Numbytes, __int64 value)
                 }
             }
             cacheData.miss++;
+            searchIndex = ((address >> noOfBlockBits) % cacheData.noSets) * noOfLinesPerSet * cacheData.blockSize;
             bool isDirty = cacheData.tagData[searchIndex / cacheData.blockSize] & (1 << 30);
             CacheResult << "W: Address: 0x" << std::hex << address << ", Set: 0x" << std::hex << (cacheData.associativity ? (searchIndex / cacheData.blockSize) / cacheData.associativity : 0) << ", Miss, Tag: 0x" << std::hex << tag << ", " << (isDirty ? "Dirty" : "Clean") << std::endl;
             goto memStore;
@@ -163,8 +164,6 @@ void storeMemory(int address, int Numbytes, __int64 value)
                 if ((tag << 12) == (cacheData.tagData[searchIndex / cacheData.blockSize] << 12))
                 {
                     cacheData.hit++;
-                    bool isDirty = cacheData.tagData[searchIndex / cacheData.blockSize] & (1 << 30);
-                    CacheResult << "W: Address: 0x" << std::hex << address << ", Set: 0x" << std::hex << (cacheData.associativity ? (searchIndex / cacheData.blockSize) / cacheData.associativity : 0) << ", Hit, Tag: 0x" << std::hex << tag << ", " << (isDirty ? "Dirty" : "Clean") << std::endl;
                     searchIndex += (tempAddress % cacheData.blockSize);
                     for (int j = 0; j < Numbytes; j++)
                     {
@@ -173,13 +172,15 @@ void storeMemory(int address, int Numbytes, __int64 value)
                         value = value >> 8;
                     }
                     cacheData.tagData[searchIndex / cacheData.blockSize] |= 1 << 30;
+                    searchIndex = ((tempAddress >> noOfBlockBits) % cacheData.noSets) * noOfLinesPerSet * cacheData.blockSize;
+                    bool isDirty = cacheData.tagData[searchIndex / cacheData.blockSize] & (1 << 30);
+                    CacheResult << "W: Address: 0x" << std::hex << address << ", Set: 0x" << std::hex << (cacheData.associativity ? (searchIndex / cacheData.blockSize) / cacheData.associativity : 0) << ", Hit, Tag: 0x" << std::hex << tag << ", " << (isDirty ? "Dirty" : "Clean") << std::endl;
                     return;
                 }
             }
             cacheData.miss++;
             searchIndex = ((tempAddress >> noOfBlockBits) % cacheData.noSets) * noOfLinesPerSet * cacheData.blockSize;
-            bool isDirty = cacheData.tagData[searchIndex / cacheData.blockSize] & (1 << 30);
-            CacheResult << "W: Address: 0x" << std::hex << address << ", Set: 0x" << std::hex << (cacheData.associativity ? (searchIndex / cacheData.blockSize) / cacheData.associativity : 0) << ", Miss, Tag: 0x" << std::hex << tag << ", " << (isDirty ? "Dirty" : "Clean") << std::endl;
+            //checking for invalid data in the cache
             for (int i = 0; i < noOfLinesPerSet; i++, searchIndex += cacheData.blockSize)
             {
                 if ((cacheData.tagData[searchIndex / cacheData.blockSize] >> 31) == 0)
@@ -201,23 +202,30 @@ void storeMemory(int address, int Numbytes, __int64 value)
                     }
                     searchIndex -= cacheData.blockSize;
                     cacheData.tagData[searchIndex / cacheData.blockSize] = tag;
+                    goto cacheUpdate;
                 }
             }
-            replaceInCache(tempAddress);
-            for (int i = 0; i < noOfLinesPerSet; i++, searchIndex += cacheData.blockSize)
-            {
-                if ((tag << 12) == (cacheData.tagData[searchIndex / cacheData.blockSize] << 12))
+            replaceInCache(address);
+            cacheUpdate:
+                searchIndex = ((address >> noOfBlockBits) % cacheData.noSets) * noOfLinesPerSet * cacheData.blockSize;
+                for (int i = 0; i < noOfLinesPerSet; i++, searchIndex += cacheData.blockSize)
                 {
-                    searchIndex += (tempAddress % cacheData.blockSize);
-                    for (int j = 0; j < Numbytes; j++)
+                    if ((tag << 12) == (cacheData.tagData[searchIndex / cacheData.blockSize] << 12))
                     {
-                        char num = static_cast<char>(value & 0xFF);
-                        cacheData.cacheValues[searchIndex + j] = num;
-                        value = value >> 8;
+                        searchIndex += (tempAddress % cacheData.blockSize);
+                        for (int j = 0; j < Numbytes; j++)
+                        {
+                            char num = static_cast<char>(value & 0xFF);
+                            cacheData.cacheValues[searchIndex + j] = num;
+                            value = value >> 8;
+                        }
+                        cacheData.tagData[searchIndex / cacheData.blockSize] |= 1 << 30;
+                        tag <<= 12;
+                        tag >>= 12;
+                        bool isDirty = cacheData.tagData[searchIndex / cacheData.blockSize] & (1 << 30);
+                        CacheResult << "W: Address: 0x" << std::hex << address << ", Set: 0x" << std::hex << (cacheData.associativity ? (searchIndex / cacheData.blockSize) / cacheData.associativity : 0) << ", Miss, Tag: 0x" << std::hex << tag << ", " << (isDirty ? "Dirty" : "Clean") << std::endl;
+                        return;
                     }
-                    cacheData.tagData[searchIndex / cacheData.blockSize] |= 1 << 30;
-                    return;
-                }
             }
         }
     }
@@ -452,4 +460,34 @@ void DumpCache(std::string filename)
         output << "Set: 0x" << std::hex << setNo << ", Tag: 0x" << std::hex << tag << ", " << (isDirty ? "Dirty" : "Clean") << std::endl;
     }
     output.close();
+}
+
+void invalidatecache(){
+    int noOfBlockBits = std::log2(cacheData.blockSize);
+    int noOfSetBits = std::log2(cacheData.noSets);
+    int noOfLines = cacheData.cacheSize / (cacheData.blockSize);
+    int tempAddress = 0;
+    for (int i = 0; i < noOfLines; i++)
+    {
+        int if_valid = cacheData.tagData[i] >> 30;
+        if (if_valid == -2)
+            {
+                int tag = cacheData.tagData[i];
+                tag &= 0xFFFFF;
+                tag <<= noOfBlockBits + noOfSetBits;
+                int setNo = cacheData.associativity ? i / cacheData.associativity : 0;
+                setNo <<= noOfBlockBits;
+                tag |= setNo;
+                tempAddress = tag;
+                tempAddress = tempAddress - 65536;
+                for (int j = 0; j < cacheData.blockSize; j++)
+                {
+                    Memory[tempAddress] = cacheData.cacheValues[j];
+                    tempAddress++;
+                }
+            }
+    }
+    cacheData.cacheValues = new char[cacheData.cacheSize];
+    cacheData.tagData = new int[cacheData.cacheSize / cacheData.blockSize];
+    cacheData.fifoQueue = new std::queue<int>[cacheData.noSets];
 }

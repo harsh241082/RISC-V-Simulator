@@ -12,10 +12,11 @@ int main()
 {
     std::string fileName;
     std::ifstream input;
+    std::string command;
     while (true)
     {
-        std::string command;
         std::cin >> command;
+            start:
         if (command == "load")
         {
             std::cin >> fileName;
@@ -142,7 +143,6 @@ int main()
     ProgramCounter = 0;
     input.close();
     InitCPU(cpu);
-    std::string command;
     std::cin >> command;
     initCache();
     while (command != "exit")
@@ -193,14 +193,27 @@ int main()
                     std::cout << "Cache is disabled" << std::endl;
                     continue;
                 }
-                cacheData.cacheValues = new char[cacheData.cacheSize];
-                cacheData.tagData = new int[cacheData.cacheSize / cacheData.blockSize];
-                cacheData.fifoQueue = new std::queue<int>[cacheData.noSets];
+                invalidatecache();
             }
             else
             {
                 std::cout << "Invalid command" << std::endl;
             }
+        }
+        else if(command == "load")
+        {
+            Memory[262145] = {0};
+            instructionMemory[4096] = {""};
+            labelData = {};
+            ProgramCounter = 0;
+            EmptyLines[4096] = {};
+            cacheData.cacheValues = nullptr;
+            cacheData.tagData = nullptr;
+            cacheData.fifoQueue = nullptr;
+            cacheData.hit = 0;
+            cacheData.miss = 0;
+            breakPoints[4096] = {false};
+            goto start;
         }
         else if (command == "help")
         {

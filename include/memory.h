@@ -21,4 +21,5 @@ __int64 fechMemory(int address, int Numbytes);
 void storeData(std::vector<std::string> StoreData);
 void DumpCache(std::string filename);
 extern std::ofstream CacheResult;
+void invalidatecache();
 #endif
