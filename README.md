@@ -111,9 +111,3 @@ The project is organized as follows:\
 - **include/**: Contains all the Header files for the above source code files used in the project and an additional risc-v.h file.
   - `risc-v.h`: Contains the information about registers and instruction ,their corresponding opcode,funct values.
 - **Makefile**: Configuration file for Make to build the project..
-# Errors
-- **Error 1:** Immediate value checking
-- **Error 2:** endian format for store and load
-- **Error 3:** registers
-- **Error 4:** storage issues for dword
-- **Error 5:** memory access issues

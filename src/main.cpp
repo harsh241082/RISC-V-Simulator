@@ -3,10 +3,11 @@
 #include "../include/data.h"
 #include "../include/parser.h"
 #include "../include/executor.h"
+#include "../include/memory.h"
 #include <iostream>
 #include <random>
 #include <fstream>
-
+std::ofstream CacheResult;
 int main()
 {
     std::string fileName;
@@ -72,7 +73,6 @@ int main()
                 cacheData.replacementPolicy = data;
                 getline(cacheInput, data);
                 cacheData.writePolicy = data;
-                std::cout << std::endl;
                 continue;
             }
             else if (cacheQuary == "disable")

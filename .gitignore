@@ -2,3 +2,4 @@
 src/*.s
 src/*.txt
 src/*.exe
+src/*.output
