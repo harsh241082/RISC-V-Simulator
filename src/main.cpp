@@ -68,6 +68,10 @@ int main()
             {
                 cacheData.cacheStatus = false;
             }
+            else
+            {
+                std::cout << "Invalid command" << std::endl;
+            }
         }
         else
         {
@@ -150,21 +154,35 @@ int main()
                 std::cout << "Replacement Policy: " << cacheData.replacementPolicy << std::endl;
                 std::cout << "Write Back Policy: " << cacheData.writeBackPolicy << std::endl;
             }
+            else if (cacheQuary == "dump")
+            {
+                if (cacheData.cacheStatus == false)
+                {
+                    std::cout << "Cache is disabled" << std::endl;
+                    continue;
+                }
+                std::string filename;
+                std::cin >> filename;
+                DumpCache(filename);
+            }
             else if (cacheQuary == "disable")
             {
                 cacheData.cacheStatus = false;
             }
             else if (cacheQuary == "stats")
             {
-                std::cout << "D-cache statistics: Accesses=" << cacheData.access << ", Hit=" << cacheData.hit << ", Miss=" << cacheData.miss << ", Hit Rate=" << cacheData.hit / cacheData.access << std::endl;
+                printf("D-cache statistics: Accesses=%d, Hit=%d, Miss=%d, Hit Rate=%.2f\n",(cacheData.hit + cacheData.miss), cacheData.hit, cacheData.miss, (float)cacheData.hit / (cacheData.hit + cacheData.miss));
             }
             else if (cacheQuary == "invalidate")
             {
-                // set all the valid bits to 0
-                for (int i = 0; i < cacheData.cacheSize; i++)
+                if(cacheData.cacheStatus == false)
                 {
-                    cacheData.tagData[i] = 0;
+                    std::cout << "Cache is disabled" << std::endl;
+                    continue;
                 }
+                cacheData.cacheValues = new char[cacheData.cacheSize];
+                cacheData.tagData = new int[cacheData.cacheSize / cacheData.blockSize];
+                cacheData.fifoQueue = new std::queue<int>[cacheData.noSets];
             }
             else
             {
@@ -279,7 +297,6 @@ int main()
         std::cin >> command;
     }
     std::cout << "Exited the Simulator" << std::endl;
-    std::cout << cacheData.hit << " hits and " << cacheData.miss << " misses in cache" << std::endl;
     return 0;
 }
 #endif
