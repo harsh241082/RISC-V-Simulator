@@ -164,7 +164,7 @@ void storeMemory(int address, int Numbytes, __int64 value)
         int noOfLinesPerSet = cacheData.cacheSize / (cacheData.blockSize * cacheData.noSets);
         int searchIndex = ((tempAddress >> noOfBlockBits) % cacheData.noSets) * noOfLinesPerSet * cacheData.blockSize;
         int tag = tempAddress >> (noOfBlockBits + noOfSetBits);
-        if(cacheData.replacementPolicy == "WT")
+        if(cacheData.writePolicy == "WT")
         {
             for (int i = 0; i< noOfLinesPerSet; i++, searchIndex += cacheData.blockSize)
             {
@@ -184,7 +184,7 @@ void storeMemory(int address, int Numbytes, __int64 value)
             cacheData.miss++;
             goto memStore;
         }
-        else if (cacheData.replacementPolicy == "WB")
+        else if (cacheData.writePolicy == "WB")
         {
             for (int i = 0; i < noOfLinesPerSet; i++, searchIndex += cacheData.blockSize)
             {
@@ -255,6 +255,16 @@ void storeMemory(int address, int Numbytes, __int64 value)
     }
 }
 
+void storeMemoryForData(int address, int Numbytes, __int64 value){
+    address = address - 65536;
+    for (int i = 0; i < Numbytes; i++)
+    {
+        char num = static_cast<char>(value & 0xFF);
+        Memory[address + i] = num;
+        value = value >> 8;
+    }
+}
+
 void storeData(std::vector<std::string> StoreData)
 {
     if (StoreData[0] == ".dword")
@@ -271,7 +281,7 @@ void storeData(std::vector<std::string> StoreData)
 
                 data = strToInt(StoreData[i].substr(0, StoreData[i].length() - 1));
             }
-            storeMemory(StoreDataAddr, 8, data);
+            storeMemoryForData(StoreDataAddr, 8, data);
         }
     }
     else if (StoreData[0] == ".half")
@@ -288,7 +298,7 @@ void storeData(std::vector<std::string> StoreData)
 
                 data = strToInt(StoreData[i].substr(0, StoreData[i].length() - 1));
             }
-            storeMemory(StoreDataAddr, 2, data);
+            storeMemoryForData(StoreDataAddr, 2, data);
         }
     }
     else if (StoreData[0] == ".word")
@@ -305,7 +315,7 @@ void storeData(std::vector<std::string> StoreData)
 
                 data = strToInt(StoreData[i].substr(0, StoreData[i].length() - 1));
             }
-            storeMemory(StoreDataAddr, 4, data);
+            storeMemoryForData(StoreDataAddr, 4, data);
         }
     }
     else if (StoreData[0] == ".byte")
@@ -322,7 +332,7 @@ void storeData(std::vector<std::string> StoreData)
 
                 data = strToInt(StoreData[i].substr(0, StoreData[i].length() - 1));
             }
-            storeMemory(StoreDataAddr, 1, data);
+            storeMemoryForData(StoreDataAddr, 1, data);
         }
     }
 }
@@ -335,7 +345,7 @@ void replaceInCache(int address)
     int noOfLinesPerSet = cacheData.cacheSize / (cacheData.blockSize * cacheData.noSets);
     int searchIndex = ((tempAddress >> noOfBlockBits) % cacheData.noSets) * noOfLinesPerSet * cacheData.blockSize;
     int tag = tempAddress >> (noOfBlockBits + noOfSetBits);
-    if(cacheData.writeBackPolicy == "WB")
+    if(cacheData.writePolicy == "WB")
     {
         for (int i = 0; i < noOfLinesPerSet; i++, searchIndex += cacheData.blockSize)
         {

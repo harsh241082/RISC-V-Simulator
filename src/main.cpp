@@ -23,6 +23,7 @@ int main()
             {
                 std::cout << "file not found" << std::endl;
                 std::cout << "enter a valid file name" << std::endl;
+                std::cout << std::endl;
                 continue;
             }
             break;
@@ -61,7 +62,8 @@ int main()
                 getline(cacheInput, data);
                 cacheData.replacementPolicy = data;
                 getline(cacheInput, data);
-                cacheData.writeBackPolicy = data;
+                cacheData.writePolicy = data;
+                std::cout << std::endl;
                 continue;
             }
             else if (cacheQuary == "disable")
@@ -70,7 +72,8 @@ int main()
             }
             else
             {
-                std::cout << "Invalid command" << std::endl;
+                std::cout << "Invalid command" << std::endl
+                          << std::endl;
             }
         }
         else
@@ -152,7 +155,7 @@ int main()
                 std::cout << "Block Size: " << cacheData.blockSize << std::endl;
                 std::cout << "Associativity: " << cacheData.associativity << std::endl;
                 std::cout << "Replacement Policy: " << cacheData.replacementPolicy << std::endl;
-                std::cout << "Write Back Policy: " << cacheData.writeBackPolicy << std::endl;
+                std::cout << "Write Policy: " << cacheData.writePolicy << std::endl;
             }
             else if (cacheQuary == "dump")
             {
@@ -164,6 +167,7 @@ int main()
                 std::string filename;
                 std::cin >> filename;
                 DumpCache(filename);
+                std::cout << std::endl;
             }
             else if (cacheQuary == "disable")
             {
@@ -171,7 +175,7 @@ int main()
             }
             else if (cacheQuary == "stats")
             {
-                printf("D-cache statistics: Accesses=%d, Hit=%d, Miss=%d, Hit Rate=%.2f\n",(cacheData.hit + cacheData.miss), cacheData.hit, cacheData.miss, (float)cacheData.hit / (cacheData.hit + cacheData.miss));
+                printf("D-cache statistics: Accesses=%d, Hit=%d, Miss=%d, Hit Rate=%.2f\n\n",(cacheData.hit + cacheData.miss), cacheData.hit, cacheData.miss, (float)cacheData.hit / (cacheData.hit + cacheData.miss));
             }
             else if (cacheQuary == "invalidate")
             {

@@ -18,9 +18,9 @@ struct cache
     char *cacheValues;
     int *tagData;
     std::string replacementPolicy;
-    std::string writeBackPolicy;
+    std::string writePolicy;
     std::queue<int> *fifoQueue;
-    cache() : cacheStatus(false), cacheSize(0), blockSize(0), associativity(0), replacementPolicy(""), writeBackPolicy(""), hit(0), miss(0) {}
+    cache() : cacheStatus(false), cacheSize(0), blockSize(0), associativity(0), replacementPolicy(""), writePolicy(""), hit(0), miss(0) {}
 };
 extern cache cacheData;
 void initCache();
