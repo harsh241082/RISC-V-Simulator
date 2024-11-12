@@ -5,6 +5,6 @@
 #include "memory.h"
 #include <iostream>
 extern bool breakPoints[4096];
-void executeInstruction();
+void executeInstruction(int);
 void RunTillBreakPoint(int totalLines);
 #endif

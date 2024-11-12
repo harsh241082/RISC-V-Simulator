@@ -7,7 +7,7 @@ void RunTillBreakPoint(int totalLines)
     int line = ProgramCounter;
     if (breakPoints[ProgramCounter])
     {
-        executeInstruction();
+        executeInstruction(totalLines);
     }
     while (ProgramCounter < totalLines)
     {
@@ -16,17 +16,17 @@ void RunTillBreakPoint(int totalLines)
             std::cout << "Execution stoped at breakpoint" << std::endl;
             break;
         }
-        executeInstruction();
+        executeInstruction(totalLines);
     }
 
     std::cout << std::endl;
 }
-void executeInstruction()
+void executeInstruction(int noOfLines)
 {
     Instruction instruction = Lines[ProgramCounter];
-    if(instruction.error != "")
+    if (instruction.error != "")
     {
-        std::cout << "Error: " << instruction.error << "at line " << ProgramCounter+1 << std::endl;
+        std::cout << "Error: " << instruction.error << "at line " << ProgramCounter + 1 << std::endl;
         ProgramCounter++;
         exit(0);
     }
@@ -74,4 +74,8 @@ void executeInstruction()
     std::cout << "Executed: " << line << "; PC = " << progctr << std::endl;
     it->second(instruction);
     ProgramCounter++;
+    if (ProgramCounter >= noOfLines)
+    {
+        printf("\nD-cache statistics: Accesses=%d, Hit=%d, Miss=%d, Hit Rate=%.2f\n\n", (cacheData.hit + cacheData.miss), cacheData.hit, cacheData.miss, ((cacheData.hit + cacheData.miss) != 0 ? ((float)cacheData.hit / (cacheData.hit + cacheData.miss)) : 0));
+    }
 }

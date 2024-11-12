@@ -207,6 +207,7 @@ int main()
         }
         else if (command == "load")
         {
+            bool cachestatus = cacheData.cacheStatus;
             Memory[262145] = {0};
             instructionMemory[4096] = {""};
             labelData = {};
@@ -217,6 +218,7 @@ int main()
             cacheData.fifoQueue = nullptr;
             cacheData.hit = 0;
             cacheData.miss = 0;
+            cacheData.cacheStatus = cachestatus;
             breakPoints[4096] = {false};
             goto start;
         }
@@ -246,7 +248,6 @@ int main()
                 continue;
             }
             RunTillBreakPoint(numLines);
-            printf("D-cache statistics: Accesses=%d, Hit=%d, Miss=%d, Hit Rate=%.2f\n\n", (cacheData.hit + cacheData.miss), cacheData.hit, cacheData.miss, ((cacheData.hit + cacheData.miss) != 0 ? ((float)cacheData.hit / (cacheData.hit + cacheData.miss)) : 0));
         }
         else if (command == "regs")
         {
@@ -269,7 +270,7 @@ int main()
                 std::cin >> command;
                 continue;
             }
-            executeInstruction();
+            executeInstruction(numLines);
             std::cout << std::endl;
         }
         else if (command == "show-stack")
