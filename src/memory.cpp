@@ -39,42 +39,6 @@ void ShowMemory(std::string address, int count)
     std::cout << std::endl;
 }
 
-void showCallStack(int numLines)
-{
-    int sp = 1;
-    int address = 0x4fff8;
-    if (ProgramCounter >= numLines)
-    {
-        std::cout << "Empty call Stack: Execution completed" << std::endl;
-        return;
-    }
-    std::cout << "Call Stack:" << std::endl;
-    if (stackPointer == 1)
-    {
-        std::cout << "main:" << ProgramCounter << std::endl;
-        std::cout << std::endl;
-        return;
-    }
-    int lineno = fechMemory(address, 8) / 4 - 1;
-    std::cout << "main:" << lineno << std::endl;
-    sp++;
-    while (sp < stackPointer)
-    {
-        std::string label;
-        label = Lines[lineno].label;
-        address -= 8;
-        lineno = fechMemory(address, 8);
-        std::cout << label << ":" << lineno + 1 << std::endl;
-        sp++;
-    }
-    std::string label;
-    label = Lines[lineno].label;
-    address -= 8;
-    lineno = fechMemory(address, 8);
-    std::cout << label << ":" << ProgramCounter << std::endl;
-    std::cout << std::endl;
-}
-
 __int64 fechMemory(int address, int Numbytes)
 {
     __int64 data = 0;
@@ -93,6 +57,8 @@ __int64 fechMemory(int address, int Numbytes)
             {
                 // cacheData.hit case
                 cacheData.hit++;
+                bool isDirty = cacheData.tagData[searchIndex / cacheData.blockSize] & (1 << 30);
+                CacheResult << "R: Address: 0x" << std::hex << address << ", Set: 0x" << std::hex << (cacheData.associativity ? (searchIndex / cacheData.blockSize) / cacheData.associativity : 0) << ", Hit, Tag: 0x" << std::hex << tag << ", " << (isDirty ? "Dirty" : "Clean") << std::endl;
                 tag |= 1 << 31;
                 int pcBits = ProgramCounter << 24;
                 pcBits = pcBits >> 2;
@@ -113,6 +79,8 @@ __int64 fechMemory(int address, int Numbytes)
         // cacheData.miss case
         cacheData.miss++;
         searchIndex = ((tempAddress >> noOfBlockBits) % cacheData.noSets) * noOfLinesPerSet * cacheData.blockSize;
+        bool isDirty = cacheData.tagData[searchIndex / cacheData.blockSize] & (1 << 30);
+        CacheResult << "R: Address: 0x" << std::hex << address << ", Set: 0x" << std::hex << (cacheData.associativity ? (searchIndex / cacheData.blockSize) / cacheData.associativity : 0) << ", Miss, Tag: 0x" << std::hex << tag << ", " << (isDirty ? "Dirty" : "Clean") << std::endl;
         for (int i = 0; i < noOfLinesPerSet; i++, searchIndex += cacheData.blockSize)
         {
             if ((cacheData.tagData[searchIndex / cacheData.blockSize] >> 31) == 0)
@@ -139,8 +107,8 @@ __int64 fechMemory(int address, int Numbytes)
         }
         replaceInCache(tempAddress);
     }
-    // featching directly from main mem
-    end:
+// featching directly from main mem
+end:
     address = address + Numbytes - 1;
     address = address - 65536;
     for (int i = Numbytes - 1; i >= 0; i--)
@@ -156,21 +124,23 @@ __int64 fechMemory(int address, int Numbytes)
 
 void storeMemory(int address, int Numbytes, __int64 value)
 {
-    if(cacheData.cacheStatus)
+    if (cacheData.cacheStatus)
     {
         int tempAddress = address;
         int noOfBlockBits = std::log2(cacheData.blockSize);
-        int noOfSetBits = std::log2(cacheData.noSets);    
+        int noOfSetBits = std::log2(cacheData.noSets);
         int noOfLinesPerSet = cacheData.cacheSize / (cacheData.blockSize * cacheData.noSets);
         int searchIndex = ((tempAddress >> noOfBlockBits) % cacheData.noSets) * noOfLinesPerSet * cacheData.blockSize;
         int tag = tempAddress >> (noOfBlockBits + noOfSetBits);
-        if(cacheData.writePolicy == "WT")
+        if (cacheData.writePolicy == "WT")
         {
-            for (int i = 0; i< noOfLinesPerSet; i++, searchIndex += cacheData.blockSize)
+            for (int i = 0; i < noOfLinesPerSet; i++, searchIndex += cacheData.blockSize)
             {
                 if ((tag << 12) == (cacheData.tagData[searchIndex / cacheData.blockSize] << 12))
                 {
                     cacheData.hit++;
+                    bool isDirty = cacheData.tagData[searchIndex / cacheData.blockSize] & (1 << 30);
+                    CacheResult << "W: Address: 0x" << std::hex << address << ", Set: 0x" << std::hex << (cacheData.associativity ? (searchIndex / cacheData.blockSize) / cacheData.associativity : 0) << ", Hit, Tag: 0x" << std::hex << tag << ", " << (isDirty ? "Dirty" : "Clean") << std::endl;
                     searchIndex += (tempAddress % cacheData.blockSize);
                     for (int j = 0; j < Numbytes; j++)
                     {
@@ -182,6 +152,8 @@ void storeMemory(int address, int Numbytes, __int64 value)
                 }
             }
             cacheData.miss++;
+            bool isDirty = cacheData.tagData[searchIndex / cacheData.blockSize] & (1 << 30);
+            CacheResult << "W: Address: 0x" << std::hex << address << ", Set: 0x" << std::hex << (cacheData.associativity ? (searchIndex / cacheData.blockSize) / cacheData.associativity : 0) << ", Miss, Tag: 0x" << std::hex << tag << ", " << (isDirty ? "Dirty" : "Clean") << std::endl;
             goto memStore;
         }
         else if (cacheData.writePolicy == "WB")
@@ -191,6 +163,8 @@ void storeMemory(int address, int Numbytes, __int64 value)
                 if ((tag << 12) == (cacheData.tagData[searchIndex / cacheData.blockSize] << 12))
                 {
                     cacheData.hit++;
+                    bool isDirty = cacheData.tagData[searchIndex / cacheData.blockSize] & (1 << 30);
+                    CacheResult << "W: Address: 0x" << std::hex << address << ", Set: 0x" << std::hex << (cacheData.associativity ? (searchIndex / cacheData.blockSize) / cacheData.associativity : 0) << ", Hit, Tag: 0x" << std::hex << tag << ", " << (isDirty ? "Dirty" : "Clean") << std::endl;
                     searchIndex += (tempAddress % cacheData.blockSize);
                     for (int j = 0; j < Numbytes; j++)
                     {
@@ -204,6 +178,8 @@ void storeMemory(int address, int Numbytes, __int64 value)
             }
             cacheData.miss++;
             searchIndex = ((tempAddress >> noOfBlockBits) % cacheData.noSets) * noOfLinesPerSet * cacheData.blockSize;
+            bool isDirty = cacheData.tagData[searchIndex / cacheData.blockSize] & (1 << 30);
+            CacheResult << "W: Address: 0x" << std::hex << address << ", Set: 0x" << std::hex << (cacheData.associativity ? (searchIndex / cacheData.blockSize) / cacheData.associativity : 0) << ", Miss, Tag: 0x" << std::hex << tag << ", " << (isDirty ? "Dirty" : "Clean") << std::endl;
             for (int i = 0; i < noOfLinesPerSet; i++, searchIndex += cacheData.blockSize)
             {
                 if ((cacheData.tagData[searchIndex / cacheData.blockSize] >> 31) == 0)
@@ -245,7 +221,7 @@ void storeMemory(int address, int Numbytes, __int64 value)
             }
         }
     }
-    memStore:
+memStore:
     address = address - 65536;
     for (int i = 0; i < Numbytes; i++)
     {
@@ -255,7 +231,8 @@ void storeMemory(int address, int Numbytes, __int64 value)
     }
 }
 
-void storeMemoryForData(int address, int Numbytes, __int64 value){
+void storeMemoryForData(int address, int Numbytes, __int64 value)
+{
     address = address - 65536;
     for (int i = 0; i < Numbytes; i++)
     {
@@ -345,7 +322,7 @@ void replaceInCache(int address)
     int noOfLinesPerSet = cacheData.cacheSize / (cacheData.blockSize * cacheData.noSets);
     int searchIndex = ((tempAddress >> noOfBlockBits) % cacheData.noSets) * noOfLinesPerSet * cacheData.blockSize;
     int tag = tempAddress >> (noOfBlockBits + noOfSetBits);
-    if(cacheData.writePolicy == "WB")
+    if (cacheData.writePolicy == "WB")
     {
         for (int i = 0; i < noOfLinesPerSet; i++, searchIndex += cacheData.blockSize)
         {
@@ -456,7 +433,7 @@ void DumpCache(std::string filename)
 {
     std::ofstream output;
     output.open(filename);
-    if(!output.is_open())
+    if (!output.is_open())
     {
         std::cout << "file not found" << std::endl;
         return;
@@ -465,14 +442,14 @@ void DumpCache(std::string filename)
     for (int i = 0; i < noOfLines; i++)
     {
         bool isValid = cacheData.tagData[i] & (1 << 31);
-        if(!isValid)
+        if (!isValid)
         {
             continue;
         }
-        int setNo = (i + 1) / cacheData.noSets;
+        int setNo = cacheData.associativity ? (i + 1) / cacheData.associativity : 0;
         int tag = cacheData.tagData[i] & 0xFFFFF;
         bool isDirty = cacheData.tagData[i] & (1 << 30);
-        output << "Set: 0x" << std::hex << setNo << ", Tag: 0x" << std::hex << tag << ", " << (isDirty? "Dirty": "Clean") << std::endl;
+        output << "Set: 0x" << std::hex << setNo << ", Tag: 0x" << std::hex << tag << ", " << (isDirty ? "Dirty" : "Clean") << std::endl;
     }
     output.close();
-}   
+}

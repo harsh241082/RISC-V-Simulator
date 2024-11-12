@@ -26,6 +26,15 @@ int main()
                 std::cout << std::endl;
                 continue;
             }
+            int index = fileName.find(".");
+            std::string CacheResultFileName = fileName.substr(0, index) + ".output";
+            remove(CacheResultFileName.c_str());
+            CacheResult.open(CacheResultFileName);
+            if (!CacheResult.is_open())
+            {
+                std::cout << "Error occured loading cache" << std::endl;
+                exit(1);
+            }
             break;
         }
         else if (command == "cache_sim")
@@ -175,11 +184,11 @@ int main()
             }
             else if (cacheQuary == "stats")
             {
-                printf("D-cache statistics: Accesses=%d, Hit=%d, Miss=%d, Hit Rate=%.2f\n\n",(cacheData.hit + cacheData.miss), cacheData.hit, cacheData.miss, (float)cacheData.hit / (cacheData.hit + cacheData.miss));
+                printf("D-cache statistics: Accesses=%d, Hit=%d, Miss=%d, Hit Rate=%.2f\n\n", (cacheData.hit + cacheData.miss), cacheData.hit, cacheData.miss, (float)cacheData.hit / (cacheData.hit + cacheData.miss));
             }
             else if (cacheQuary == "invalidate")
             {
-                if(cacheData.cacheStatus == false)
+                if (cacheData.cacheStatus == false)
                 {
                     std::cout << "Cache is disabled" << std::endl;
                     continue;

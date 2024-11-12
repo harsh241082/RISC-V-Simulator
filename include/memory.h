@@ -10,7 +10,7 @@
 #include <random>
 #include <ctime>
 #include <queue>
-#include <fstream>  
+#include <fstream>
 extern std::string instructionMemory[4096];
 extern char Memory[262145];
 extern int stackPointer;
@@ -21,4 +21,5 @@ __int64 fechMemory(int address, int Numbytes);
 void showCallStack(int numLines);
 void storeData(std::vector<std::string> StoreData);
 void DumpCache(std::string filename);
+extern std::ofstream CacheResult;
 #endif
